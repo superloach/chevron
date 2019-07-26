@@ -178,22 +178,23 @@ class NAS:
 	regex = r"%s<<(%s)" % (VAR.regex, decap(MAT.regex))
 
 	def __init__(self, var, expr):
-		self.expr = MAT.parse(expr)
+		self.expr = expr
 		self.var = VAR(var)
 
 	def __call__(self):
-		self.var.set(NUM(self.expr))
+		value = MAT.parse(self.expr)
+		self.var.set(NUM(value))
 
 class IDX:
 	regex = r"%s<(%s)>(.*)" % (VAR.regex, decap(MAT.regex))
 
 	def __init__(self, to, idx, frm):
 		self.to = VAR(to)
-		self.idx = MAT.parse(idx)
+		self.idx = idx
 		self.frm = MIX(frm)
 
 	def __call__(self):
-		index = NUM(self.idx)
+		index = NUM(MAT.parse(self.idx))
 		string = TXT(self.frm)
 		if index > len(string):
 			char = ''
@@ -214,7 +215,7 @@ class HOP:
 		self.var = VAR('_#')
 
 	def __call__(self):
-		line = NUM(MAT.parse(self.line))
+		line = NUM(MAT.parse(self.line)) - 1
 		if line < 0: self.rel = True
 		if self.rel: line = self.var.get() + line
 		self.var.set(line)
@@ -235,7 +236,7 @@ class SKP:
 	def __call__(self):
 		do = NUM(MAT.parse(self.expr))
 		if do:
-			line = NUM(MAT.parse(self.line))
+			line = NUM(MAT.parse(self.line)) - 1
 			if line < 0: self.rel = True
 			if self.rel: line = self.var.get() + line
 			self.var.set(line)
@@ -258,7 +259,7 @@ class JMP:
 		txt1 = TXT(self.mix1)
 		txt2 = TXT(self.mix2)
 		if txt1 == txt2:
-			line = NUM(MAT.parse(self.line))
+			line = NUM(MAT.parse(self.line)) - 1
 			if line < 0: self.rel = True
 			if self.rel: line = self.var.get() + line
 			self.var.set(line)
@@ -321,13 +322,13 @@ def main(filename):
 	linenum = VAR('_#')
 
 	while 1:
+		line = int(linenum.get()) - 1
 		try:
-			cmd = program[int(linenum.get()) - 1]
+			cmd = program[line]
 		except IndexError:
 			DIE('')()
 
 		cmd()
-#		print(VAR.all)
 
 		linenum.set(linenum.get() + 1)
 
