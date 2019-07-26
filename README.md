@@ -19,16 +19,39 @@ parsers
 | `^_e` | an empty TXT |
 | `^_c` | contents of the last comment |
 
-MIXes (mixtures) are any text, and can contain/resolve VAR references to a TXT.
+-------
 
-example: `hi ^n!` would produce the TXT `hi terra!` if `^n` was the TXT `terra`.
+**MIX**es (mixtures) are any text, and can resolve to a **TXT** (applying **VAR** values).
 
-MATs (mathematics) work similarly to MIXes, but resolve to NUMs and support basic expressions.
+example: `hi ^n!` would produce the **TXT** `hi terra!` if **VAR** `n` was the **TXT** `terra`.
 
-example: `^a+^b` would produce the NUM `3` if VAR a was the NUM `1` and VAR b was the NUM `2`.
+-------
+
+**MAT**s (mathematics) work similarly to **MIX**es, but resolve to **NUM**s and support basic 2-term expressions.
+
+example: `^a+^b` would produce the **NUM** `3` if **VAR** `a` was the **NUM** `1` and **VAR** `b` was the **NUM** `2`.
+
+| operator | purpose | example |
+| --- | --- | --- |
+| + | sum of operand 1 and operand 2 | `1 + ^a` |
+| - | difference of operand 1 and operand 2 | `^b - 2` |
+| / | integer quotient of operand 1 and operand 2 | `^n / 3` |
+| * | product of operand 1 and operand 2 | `^c * ^d` |
+| % | modulus of operand 1 and operand 2 | `5 % 3` |
+| < | operand 1 is less than operand 2 | `0 < ^a` |
+| > | operand 2 is greater than operand 2 | `^i > 1000` |
+| = | operand 1 is equal to operand 2 | `^f = 3` |
+| ~ | apply special operation (from operand 2) to operand 1 | `^m ~ p`
+
+| special operation | meaning |
+| --- | --- |
+| p | is operand 1 prime |
+| o | is operand 1 odd |
+| e | is operand 1 even |
 
 commands
 --------
+each line is interpreted as one of the following commands:
 
 | name | description | syntax | parser meanings |
 | --- | --- | --- | --- |
