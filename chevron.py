@@ -140,7 +140,7 @@ class OUT:
 		print(value)
 
 class TIN:
-	regex = r">([^>]*)>\^?(.)"
+	regex = r">([^>]*)>%s" % VAR.regex
 
 	def __init__(self, prompt, var):
 		self.prompt = MIX(prompt)
@@ -152,7 +152,7 @@ class TIN:
 		self.var.set(TXT(text))
 
 class NIN:
-	regex = r">([^>]*)>>\^?(.)"
+	regex = r">([^>]*)>>%s" % VAR.regex
 
 	def __init__(self, prompt, var):
 		self.prompt = MIX(prompt)
@@ -192,7 +192,7 @@ class IDX:
 		self.frm = MIX(frm)
 
 	def __call__(self):
-		index = NUM(math)
+		index = NUM(self.idx)
 		string = TXT(self.frm)
 		if index > len(string):
 			char = ''
@@ -213,10 +213,10 @@ class HOP:
 		self.var = VAR('_#')
 
 	def __call__(self):
-		line = NUM(self.line) - 1
+		line = NUM(self.line)
 		if line < 0: self.rel = True
 		if self.rel: line = self.var.get() + line
-		self.var.set(line)
+		self.var.set(line - 1)
 
 class SKP:
 	regex = r"->(.)(%s)\?(%s)" % (decap(MAT.regex), decap(MAT.regex))
@@ -234,10 +234,10 @@ class SKP:
 	def __call__(self):
 		do = NUM(self.expr)
 		if do:
-			line = NUM(self.line) - 1
+			line = NUM(self.line)
 			if line < 0: self.rel = True
 			if self.rel: line = self.var.get() + line
-			self.var.set(line)
+			self.var.set(line - 1)
 
 class JMP:
 	regex = r"->(.)(%s)\?\?([^=]*)=(.*)" % decap(MAT.regex)
@@ -257,10 +257,10 @@ class JMP:
 		txt1 = TXT(self.mix1)
 		txt2 = TXT(self.mix2)
 		if txt1 == txt2:
-			line = NUM(self.line) - 1
+			line = NUM(self.line)
 			if line < 0: self.rel = True
 			if self.rel: line = self.var.get() + line
-			self.var.set(line)
+			self.var.set(line - 1)
 
 class DIE:
 	regex = r"><(.*)"
