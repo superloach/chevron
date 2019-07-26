@@ -92,14 +92,13 @@ class MAT:
 	regex = r"((?:%s)|%s)(?:(%s)((?:%s)|%s|%s))?" % (var, num, opr, var, num, ter)
 
 	def parse(text):
-		expr = TXT(MIX(text))
-		match = re.match(r'^%s$' % MAT.regex, expr)
+		match = re.match(r'^%s$' % MAT.regex, text)
 		return MAT(*match.groups())
 
 	def __init__(self, a, oper, b):
-		self.a = a
+		self.a = MIX(a)
 		self.oper = oper
-		self.b = b
+		self.b = MIX(b)
 
 	def __num__(self):
 		self.a = NUM(self.a)
@@ -108,7 +107,7 @@ class MAT:
 			return self.a
 
 		if self.oper == '~':
-			test = MAT.test[self.b]
+			test = MAT.test[str(TXT(self.b))]
 			value = test(self.a)
 		else:
 			self.b = NUM(self.b)
@@ -124,11 +123,11 @@ class COM:
 	regex = "<>(.*)"
 
 	def __init__(self, comment):
-		self.comment = comment
+		self.comment = MIX(comment)
 		self.var = VAR('_c')
 
 	def __call__(self):
-		self.var.set(self.comment)
+		self.var.set(TXT(self.comment))
 
 class OUT:
 	regex = r">([^<>][^>]*)"
@@ -149,8 +148,8 @@ class TIN:
 
 	def __call__(self):
 		prompt = TXT(self.prompt)
-		text = TXT(input(prompt))
-		self.var.set(text)
+		text = input(prompt)
+		self.var.set(TXT(text))
 
 class NIN:
 	regex = r">([^>]*)>>\^?(.)"
@@ -161,46 +160,41 @@ class NIN:
 
 	def __call__(self):
 		prompt = TXT(self.prompt)
-		number = NUM(input(prompt))
-		self.var.set(number)
+		number = input(prompt)
+		self.var.set(NUM(number))
 
 class TAS:
 	regex = r"%s<([^<>][^>]*)" % VAR.regex
 
 	def __init__(self, var, text):
-		self.text = text
+		self.text = MIX(text)
 		self.var = VAR(var)
 
 	def __call__(self):
-		text = MIX(self.text)
-		self.var.set(TXT(text))
+		self.var.set(TXT(self.text))
 
 class NAS:
 	regex = r"%s<<(%s)" % (VAR.regex, decap(MAT.regex))
 
 	def __init__(self, var, expr):
-		self.expr = expr
+		self.expr = MAT.parse(expr)
 		self.var = VAR(var)
 
 	def __call__(self):
-		expr = MIX(self.expr)
-		math = MAT.parse(expr)
-		self.var.set(NUM(math))
+		self.var.set(NUM(self.expr))
 
 class IDX:
 	regex = r"%s<(%s)>(.*)" % (VAR.regex, decap(MAT.regex))
 
 	def __init__(self, to, idx, frm):
 		self.to = VAR(to)
-		self.idx = idx
-		self.frm = frm
+		self.idx = MAT.parse(idx)
+		self.frm = MIX(frm)
 
 	def __call__(self):
-		idx = MIX(self.idx)
-		math = MAT.parse(idx)
-		index = int(NUM(math))
-		string = TXT(MIX(self.frm))
-		if index>len(string):
+		index = NUM(math)
+		string = TXT(self.frm)
+		if index > len(string):
 			char = ''
 		else:
 			char = string[index - 1]
@@ -215,14 +209,12 @@ class HOP:
 			self.rel = True
 		else:
 			line = expos + line
-		self.line = line
+		self.line = MAT.parse(line)
 		self.var = VAR('_#')
 
 	def __call__(self):
-		math = MAT.parse(self.line)
-		line = NUM(math) - 1
+		line = NUM(self.line) - 1
 		if line < 0: self.rel = True
-		if line == 0: DIE('where is line 0')()
 		if self.rel: line = self.var.get() + line
 		self.var.set(line)
 
@@ -235,16 +227,14 @@ class SKP:
 			self.rel = True
 		else:
 			line = expos + line
-		self.expr = expr
-		self.line = line
+		self.expr = MAT.parse(expr)
+		self.line = MAT.parse(line)
 		self.var = VAR('_#')
 
 	def __call__(self):
-		math = MAT.parse(self.expr)
-		do = NUM(math)
+		do = NUM(self.expr)
 		if do:
-			math = MAT.parse(self.line)
-			line = NUM(math) - 1
+			line = NUM(self.line) - 1
 			if line < 0: self.rel = True
 			if self.rel: line = self.var.get() + line
 			self.var.set(line)
@@ -258,19 +248,16 @@ class JMP:
 			self.rel = True
 		else:
 			line = expos + line
-		self.line = line
-		self.mix1 = mix1
-		self.mix2 = mix2
+		self.line = MAT.parse(line)
+		self.mix1 = MIX(mix1)
+		self.mix2 = MIX(mix2)
 		self.var = VAR('_#')
 
 	def __call__(self):
-		mix1 = MIX(self.mix1)
-		mix2 = MIX(self.mix2)
-		txt1 = TXT(mix1)
-		txt2 = TXT(mix2)
+		txt1 = TXT(self.mix1)
+		txt2 = TXT(self.mix2)
 		if txt1 == txt2:
-			math = MAT.parse(self.line)
-			line = NUM(math) - 1
+			line = NUM(self.line) - 1
 			if line < 0: self.rel = True
 			if self.rel: line = self.var.get() + line
 			self.var.set(line)
@@ -302,8 +289,10 @@ def main(filename):
 	VAR('_q').set('?')
 	VAR('_d').set('-')
 	VAR('_e').set('=')
+	VAR('_n').set('\n')
 	VAR('__').set('')
 	VAR('_#').set(1)
+	VAR('_i').set(sys.stdin.isatty())
 
 	file = open(filename)
 
@@ -338,6 +327,7 @@ def main(filename):
 
 		cmd()
 #		print(VAR.all)
+
 		linenum.set(linenum.get() + 1)
 
 if __name__ == '__main__':
