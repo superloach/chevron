@@ -12,12 +12,17 @@ parsers
 -------
 **VAR**s (variables) are in the form `^c`, where `c` is any character. Special `VAR`s in the form `^_c` are used by the interpreter.
 
-| usage | value |
+| special var | value |
 | --- | --- |
-| `^_l` | current line NUM |
-| `^_u` | a literal `^` |
-| `^_e` | an empty TXT |
-| `^_c` | contents of the last comment |
+| `_#` | current line **NUM** |
+| `_c` | last comment **TXT** |
+| `_r` | literal `>` **TXT** |
+| `_l` | literal `<` **TXT** |
+| `_u` | literal `^` **TXT** |
+| `_q` | literal `?` **TXT** |
+| `_d` | literal `-` **TXT** |
+| `_e` | literal `=` **TXT** |
+| `__` | empty **TXT** |
 
 -------
 
