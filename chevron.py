@@ -141,7 +141,7 @@ class OUT:
 		print(value)
 
 class TIN:
-	regex = r">([^>]*)>%s" % VAR.regex
+	regex = r">([^>]+)>%s" % VAR.regex
 
 	def __init__(self, prompt, var):
 		self.prompt = MIX(prompt)
@@ -153,7 +153,7 @@ class TIN:
 		self.var.set(TXT(text))
 
 class NIN:
-	regex = r">([^>]*)>>%s" % VAR.regex
+	regex = r">([^>]+)>>%s" % VAR.regex
 
 	def __init__(self, prompt, var):
 		self.prompt = MIX(prompt)
@@ -186,7 +186,7 @@ class NAS:
 		self.var.set(NUM(value))
 
 class IDX:
-	regex = r"%s<(%s)>(.*)" % (VAR.regex, decap(MAT.regex))
+	regex = r"%s<(%s)>(.+)" % (VAR.regex, decap(MAT.regex))
 
 	def __init__(self, to, idx, frm):
 		self.to = VAR(to)
@@ -242,7 +242,7 @@ class SKP:
 			self.var.set(line)
 
 class JMP:
-	regex = r"->(.)(%s)\?\?([^=]*)=(.*)" % decap(MAT.regex)
+	regex = r"->(.)(%s)\?\?([^=]+)=(.+)" % decap(MAT.regex)
 
 	def __init__(self, expos, line, mix1, mix2):
 		self.rel = False
