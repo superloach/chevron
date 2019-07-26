@@ -55,6 +55,7 @@ example: `^a+^b` would produce the **NUM** `3` if **VAR** `a` was the **NUM** `1
 | o | is operand 1 odd |
 | e | is operand 1 even |
 | r | random **NUM** between 0 and operand 1 |
+| n | boolean negation of operand 1 |
 
 commands
 --------

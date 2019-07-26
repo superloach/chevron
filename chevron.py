@@ -83,6 +83,7 @@ class MAT:
 		'o': lambda n: not not (n % 2),
 		'e': lambda n: not (n % 2),
 		'r': lambda n: random.randint(0, n),
+		'n': lambda n: not n,
 	}
 	opr = '|'.join([re.escape(o) for o in [*oper.keys()] + ['~']])
 	ter = '|'.join([re.escape(t) for t in test.keys()])
