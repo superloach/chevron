@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import sys, re
+import sys, re, random
 
 def decap(regex):
 	expr = r"""\(([^?](?:[^:](?:[^)]+)?)?)?\)"""
@@ -82,6 +82,7 @@ class MAT:
 		'p': lambda n: not sum([n % x == 0 for x in range(2, n)]),
 		'o': lambda n: not not (n % 2),
 		'e': lambda n: not (n % 2),
+		'r': lambda n: random.randint(0, n),
 	}
 	opr = '|'.join([re.escape(o) for o in [*oper.keys()] + ['~']])
 	ter = '|'.join([re.escape(t) for t in test.keys()])

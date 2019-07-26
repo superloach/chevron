@@ -53,6 +53,7 @@ example: `^a+^b` would produce the **NUM** `3` if **VAR** `a` was the **NUM** `1
 | p | is operand 1 prime |
 | o | is operand 1 odd |
 | e | is operand 1 even |
+| r | random **NUM** between 0 and operand 1 |
 
 commands
 --------
