@@ -8,8 +8,6 @@ there are two data types, **NUM** (numbers) and **TXT** (text).
 
 generally these inherit properties from types in the interpreter language. (eg. `int` and `str` in the python implementation)
 
-parsers
--------
 **VAR**s (variables) are in the form `^c`, where `c` is any character. Special `VAR`s in the form `^_c` are used by the interpreter.
 
 | special var | value |
@@ -25,6 +23,7 @@ parsers
 | `_e` | literal `=` **TXT** |
 | `__` | empty **TXT** |
 
+parsers
 -------
 
 **MIX**es (mixtures) are any text, and can resolve to a **TXT** (applying **VAR** values).
