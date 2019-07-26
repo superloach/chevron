@@ -16,6 +16,7 @@ parsers
 | --- | --- |
 | `_#` | current line **NUM** |
 | `_c` | last comment **TXT** |
+| `_i` | input is interactive |
 | `_r` | literal `>` **TXT** |
 | `_l` | literal `<` **TXT** |
 | `_u` | literal `^` **TXT** |
