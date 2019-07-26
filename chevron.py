@@ -92,13 +92,14 @@ class MAT:
 	regex = r"((?:%s)|%s)(?:(%s)((?:%s)|%s|%s))?" % (var, num, opr, var, num, ter)
 
 	def parse(text):
-		match = re.match(r'^%s$' % MAT.regex, text)
+		expr = TXT(MIX(text))
+		match = re.match(r'^%s$' % MAT.regex, expr)
 		return MAT(*match.groups())
 
 	def __init__(self, a, oper, b):
-		self.a = MIX(a)
+		self.a = a
 		self.oper = oper
-		self.b = MIX(b)
+		self.b = b
 
 	def __num__(self):
 		self.a = NUM(self.a)
@@ -209,14 +210,14 @@ class HOP:
 			self.rel = True
 		else:
 			line = expos + line
-		self.line = MAT.parse(line)
+		self.line = line
 		self.var = VAR('_#')
 
 	def __call__(self):
-		line = NUM(self.line)
+		line = NUM(MAT.parse(self.line))
 		if line < 0: self.rel = True
 		if self.rel: line = self.var.get() + line
-		self.var.set(line - 1)
+		self.var.set(line)
 
 class SKP:
 	regex = r"->(.)(%s)\?(%s)" % (decap(MAT.regex), decap(MAT.regex))
@@ -227,17 +228,17 @@ class SKP:
 			self.rel = True
 		else:
 			line = expos + line
-		self.expr = MAT.parse(expr)
-		self.line = MAT.parse(line)
+		self.expr = expr
+		self.line = line
 		self.var = VAR('_#')
 
 	def __call__(self):
-		do = NUM(self.expr)
+		do = NUM(MAT.parse(self.expr))
 		if do:
-			line = NUM(self.line)
+			line = NUM(MAT.parse(self.line))
 			if line < 0: self.rel = True
 			if self.rel: line = self.var.get() + line
-			self.var.set(line - 1)
+			self.var.set(line)
 
 class JMP:
 	regex = r"->(.)(%s)\?\?([^=]*)=(.*)" % decap(MAT.regex)
@@ -248,7 +249,7 @@ class JMP:
 			self.rel = True
 		else:
 			line = expos + line
-		self.line = MAT.parse(line)
+		self.line = line
 		self.mix1 = MIX(mix1)
 		self.mix2 = MIX(mix2)
 		self.var = VAR('_#')
@@ -257,10 +258,10 @@ class JMP:
 		txt1 = TXT(self.mix1)
 		txt2 = TXT(self.mix2)
 		if txt1 == txt2:
-			line = NUM(self.line)
+			line = NUM(MAT.parse(self.line))
 			if line < 0: self.rel = True
 			if self.rel: line = self.var.get() + line
-			self.var.set(line - 1)
+			self.var.set(line)
 
 class DIE:
 	regex = r"><(.*)"
