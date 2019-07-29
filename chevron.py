@@ -59,8 +59,9 @@ class MIX:
 
 		for name in VAR.all:
 			var = VAR(name)
-			regex = r"\^%s" % re.escape(var.name)
-			out = re.sub(regex, TXT(var.get()), out)
+			value = TXT(var.get()).replace('\\', '\\\\')
+			regex = r"\^" + re.escape(var.name)
+			out = re.sub(regex, value, out)
 
 		return out
 
@@ -197,10 +198,10 @@ class IDX:
 	def __call__(self):
 		index = NUM(MAT.parse(self.idx))
 		string = TXT(self.frm)
-		if index > len(string):
+		if index > len(string) or index == 0:
 			char = ''
 		else:
-			char = string[index - 1]
+			char = string[index - (index > 1)]
 		self.to.set(TXT(char))
 
 class HOP:
