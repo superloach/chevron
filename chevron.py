@@ -201,7 +201,7 @@ class IDX:
 		if index > len(string) or index == 0:
 			char = ''
 		else:
-			char = string[index - (index > 1)]
+			char = string[index - (index > 0)]
 		self.to.set(TXT(char))
 
 class HOP:
