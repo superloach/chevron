@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 import sys, re, random
 
+global DEBUG
+DEBUG = False
+
 def decap(regex):
 	expr = r"\(([^?](?:[^:](?:[^)]+)?)?)?\)"
 	return re.sub(expr, r"(?:\1)", regex)
@@ -315,7 +318,19 @@ def find(line):
 			command = cmd(*args)
 			return command
 
-def main(filename):
+def run(interpreter, *args):
+	filename = None
+	pargs = []
+	for arg in args:
+		if arg == '--debug':
+			DEBUG = True
+		elif not filename:
+			filename = arg
+		else:
+			pargs.append(arg)
+
+	if not filename: DIE('filename must be provided')()
+
 	VAR('_r').set('>')
 	VAR('_l').set('<')
 	VAR('_u').set('^')
@@ -325,6 +340,8 @@ def main(filename):
 	VAR('_n').set('\n')
 	VAR('_a').set('abcdefghijklmnopqrstuvwxyz')
 	VAR('_i').set('1234567890')
+	VAR('_g').set('\x00'.join(pargs))
+	VAR('_x').set('\x00')
 	VAR('__').set('')
 	VAR('_#').set(1)
 	VAR('_t').set(sys.stdin.isatty())
@@ -366,4 +383,4 @@ def main(filename):
 		linenum.set(linenum.get() + 1)
 
 if __name__ == '__main__':
-	main(*sys.argv[1:])
+	run(*sys.argv)
