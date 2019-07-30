@@ -244,9 +244,14 @@ class SKP:
 			self.var.set(line)
 
 class JMP:
-	regex = r"->(.)(%s)\?\?([^=]+)=(.+)" % decap(MAT.regex)
+	ops = {
+		'=': lambda a, b: a == b,
+		'>': lambda a, b: a in b,
+		'<': lambda a, b: b in a
+	}
+	regex = r"->(.)(%s)\?\?([^=<>]+)([=<>])(.+)" % decap(MAT.regex)
 
-	def __init__(self, expos, line, mix1, mix2):
+	def __init__(self, expos, line, mix1, op, mix2):
 		self.rel = False
 		if expos == '+':
 			self.rel = True
@@ -254,13 +259,14 @@ class JMP:
 			line = expos + line
 		self.line = line
 		self.mix1 = MIX(mix1)
+		self.op = JMP.ops[op]
 		self.mix2 = MIX(mix2)
 		self.var = VAR('_#')
 
 	def __call__(self):
 		txt1 = TXT(self.mix1)
 		txt2 = TXT(self.mix2)
-		if txt1 == txt2:
+		if self.op(txt1, txt2):
 			line = NUM(MAT.parse(self.line)) - 1
 			if line < 0: self.rel = True
 			if self.rel: line = self.var.get() + line
