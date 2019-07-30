@@ -78,6 +78,7 @@ class MAT:
 		'<': lambda a, b: a < b,
 		'>': lambda a, b: a > b,
 		'=': lambda a, b: a == b,
+		'~': None,
 	}
 	special = {
 		'p': lambda n: not sum([n % x == 0 for x in range(2, int(n))]),
@@ -90,13 +91,12 @@ class MAT:
 		'v': lambda t: ''.join(t[::-1]),
 	}
 	opr = '|'.join([re.escape(o) for o in [*oper.keys()] + ['~']])
-	ter = '|'.join([re.escape(t) for t in special.keys()])
-	var = decap(VAR.regex)
-	num = decap(NUM.regex)
+	opr2 = ''.join([*oper.keys()])
 
-	regex = r"((?:%s)|%s)(?:(%s)((?:%s)|%s|%s))?" % (var, num, opr, var, num, ter)
+	regex = r"([^?%s]+)(?:(%s)(.+))?" % (opr2, opr)
 
 	def parse(text):
+		if text[0] == '-': text = '0' + text
 		expr = TXT(MIX(text))
 		match = re.match(r'^%s$' % MAT.regex, expr)
 		return MAT(*match.groups())
@@ -335,8 +335,8 @@ def main(filename):
 	program = []
 	for line in file:
 		line = line.rstrip('\n')
-		lines.append(line)
 		if len(line):
+			lines.append(line)
 			cmd = find(line)
 			program.append(cmd)
 
