@@ -220,7 +220,6 @@ class CUT:
 		index = NUM(MAT.parse(self.idx))
 		number = NUM(MAT.parse(self.num))
 		string = TXT(self.frm)
-		print(self.to, index, number, string)
 		if index > len(string) or index == 0:
 			char = ''
 		else:
