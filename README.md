@@ -71,7 +71,8 @@ each line is interpreted as one of the following commands:
 | NIN | NUM input | `>MIX>>VAR` | prompt, target |
 | TAS | TXT assignment | `VAR<MIX` | target, text |
 | NAS | NUM assignment | `VAR<<MAT` | target, expression |
-| IDX | indexing | `VAR<MAT>MIX` | target, index, text |
+| IDX | TXT indexing | `VAR<MAT>MIX` | target, index, text |
+| IDX | TXT cutting | `VAR<MAT|MAT>MIX` | target, index, characters, text |
 | HOP | line change | `->MAT` | line |
 | SKP | line change on MAT condition | `->MAT?MAT` | line, expression |
 | JMP | line change on MIX comparison | `->MAT??MIX=MIX` | line, text 1, text 2 |
