@@ -77,3 +77,5 @@ each line is interpreted as one of the following commands:
 | SKP | line change on MAT condition | `->MAT?MAT` | line, expression |
 | JMP | line change on MIX comparison | `->MAT??MIX=MIX` | line, text 1, text 2 |
 | DIE | exit program | `><MIX` | text |
+
+(JMP comparisons: `=` for equality, `<` for contains, `>` for not contains)

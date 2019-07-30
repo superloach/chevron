@@ -269,7 +269,7 @@ class SKP:
 class JMP:
 	ops = {
 		'=': lambda a, b: a == b,
-		'>': lambda a, b: a in b,
+		'>': lambda a, b: b not in a,
 		'<': lambda a, b: b in a
 	}
 	regex = r"->(.)(%s)\?\?([^=<>]+)([=<>])(.+)" % decap(MAT.regex)
@@ -323,9 +323,11 @@ def main(filename):
 	VAR('_d').set('-')
 	VAR('_e').set('=')
 	VAR('_n').set('\n')
+	VAR('_a').set('abcdefghijklmnopqrstuvwxyz')
+	VAR('_i').set('1234567890')
 	VAR('__').set('')
 	VAR('_#').set(1)
-	VAR('_i').set(sys.stdin.isatty())
+	VAR('_t').set(sys.stdin.isatty())
 
 	file = open(filename)
 
