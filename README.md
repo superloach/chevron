@@ -46,7 +46,7 @@ example: `^a+^b` would produce the **NUM** `3` if **VAR** `a` was the **NUM** `1
 | < | operand 1 is less than operand 2 | `0 < ^a` |
 | > | operand 2 is greater than operand 2 | `^i > 1000` |
 | = | operand 1 is equal to operand 2 | `^f = 3` |
-| ~ | apply special operation (from operand 2) to operand 1 | `^m ~ p`
+| ~ | apply special operation | `^m ~ p` |
 
 | special operation | meaning |
 | --- | --- |
@@ -55,6 +55,9 @@ example: `^a+^b` would produce the **NUM** `3` if **VAR** `a` was the **NUM** `1
 | e | is operand 1 even |
 | r | random **NUM** between 0 and operand 1 |
 | n | boolean negation of operand 1 |
+| l | lowercase of operand 1 |
+| u | uppercase of operand 1 |
+| v | reverse of operand 1 |
 
 commands
 --------

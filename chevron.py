@@ -79,15 +79,18 @@ class MAT:
 		'>': lambda a, b: a > b,
 		'=': lambda a, b: a == b,
 	}
-	test = {
-		'p': lambda n: not sum([n % x == 0 for x in range(2, n)]),
-		'o': lambda n: not not (n % 2),
-		'e': lambda n: not (n % 2),
-		'r': lambda n: random.randint(0, n),
-		'n': lambda n: not n,
+	special = {
+		'p': lambda n: not sum([n % x == 0 for x in range(2, int(n))]),
+		'o': lambda n: not not (int(n) % 2),
+		'e': lambda n: not (int(n) % 2),
+		'r': lambda n: random.randint(0, int(n)),
+		'n': lambda n: not int(n),
+		'l': lambda t: t.lower(),
+		'u': lambda t: t.upper(),
+		'v': lambda t: ''.join(t[::-1]),
 	}
 	opr = '|'.join([re.escape(o) for o in [*oper.keys()] + ['~']])
-	ter = '|'.join([re.escape(t) for t in test.keys()])
+	ter = '|'.join([re.escape(t) for t in special.keys()])
 	var = decap(VAR.regex)
 	num = decap(NUM.regex)
 
@@ -104,15 +107,14 @@ class MAT:
 		self.b = b
 
 	def __num__(self):
-		self.a = NUM(self.a)
-
 		if None in [self.oper, self.b]:
 			return self.a
 
 		if self.oper == '~':
-			test = MAT.test[str(TXT(self.b))]
-			value = test(self.a)
+			special = MAT.special[self.b]
+			value = special(self.a)
 		else:
+			self.a = NUM(self.a)
 			self.b = NUM(self.b)
 			oper = MAT.oper[self.oper]
 			value = oper(self.a, self.b)
