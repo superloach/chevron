@@ -203,7 +203,29 @@ class IDX:
 		if index > len(string) or index == 0:
 			char = ''
 		else:
-			char = string[index - (index > 0)]
+			index = index - (index > 0)
+			char = string[index]
+		self.to.set(TXT(char))
+
+class CUT:
+	regex = r"%s<(%s)\|(%s)>(.+)" % (VAR.regex, decap(MAT.regex), decap(MAT.regex))
+
+	def __init__(self, to, idx, num, frm):
+		self.to = VAR(to)
+		self.idx = idx
+		self.num = num
+		self.frm = MIX(frm)
+
+	def __call__(self):
+		index = NUM(MAT.parse(self.idx))
+		number = NUM(MAT.parse(self.num))
+		string = TXT(self.frm)
+		print(self.to, index, number, string)
+		if index > len(string) or index == 0:
+			char = ''
+		else:
+			index = index - (index > 0)
+			char = string[index:index + number]
 		self.to.set(TXT(char))
 
 class HOP:
@@ -286,7 +308,7 @@ class DIE:
 		sys.exit()
 
 def find(line):
-	for cmd in [COM, OUT, TIN, NIN, TAS, NAS, IDX, HOP, SKP, JMP, DIE]:
+	for cmd in [COM, OUT, TIN, NIN, TAS, NAS, IDX, CUT, HOP, SKP, JMP, DIE]:
 		match = re.match(r"^%s$" % cmd.regex, line)
 		if match:
 			argc = cmd.__init__.__code__.co_argcount
