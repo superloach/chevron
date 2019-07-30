@@ -2,17 +2,17 @@
 import sys, re, random
 
 def decap(regex):
-	expr = r"""\(([^?](?:[^:](?:[^)]+)?)?)?\)"""
+	expr = r"\(([^?](?:[^:](?:[^)]+)?)?)?\)"
 	return re.sub(expr, r"(?:\1)", regex)
 
 class TXT(str):
 	def __new__(cls, value):
 		if '__txt__' in dir(value):
 			value = value.__txt__()
-		return  super(TXT, cls).__new__(cls, value)
+		return super(TXT, cls).__new__(cls, value)
 
 	def __repr__(self):
-		return '<STR %s>' % str(self).__repr__()
+		return '<TXT %s>' % str(self).__repr__()
 
 class NUM(int):
 	regex = r"(-?[0-9]*(?:\.[0-9]+)?)"
@@ -20,7 +20,7 @@ class NUM(int):
 	def __new__(cls, value):
 		if '__num__' in dir(value):
 			value = value.__num__()
-		return  super(NUM, cls).__new__(cls, value)
+		return super(NUM, cls).__new__(cls, value)
 
 	def __repr__(self):
 		return '<NUM %s>' % self
