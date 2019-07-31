@@ -96,7 +96,7 @@ class MAT:
 	opr = '|'.join([re.escape(o) for o in oper.keys()])
 	opr2 = ''.join([*oper.keys()])
 
-	regex = r"([^?%s]+)(?:(%s)(.+))?" % (opr2, opr)
+	regex = r"([^?|%s]+)(?:(%s)(.+))?" % (opr2, opr)
 
 	def parse(text):
 		if text[0] == '-': text = '0' + text
@@ -350,12 +350,12 @@ def run(interpreter, *args):
 
 	lines = []
 	program = []
-	for line in file:
-		line = line.rstrip('\n')
-		if len(line):
-			lines.append(line)
-			cmd = find(line)
-			program.append(cmd)
+	for rline in file:
+		for line in rline.rstrip('\n').split(';'):
+			if len(line):
+				lines.append(line)
+				cmd = find(line)
+				program.append(cmd)
 
 	file.close()
 
