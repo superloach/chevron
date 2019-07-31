@@ -93,7 +93,7 @@ class MAT:
 		'u': lambda t: t.upper(),
 		'v': lambda t: ''.join(t[::-1]),
 	}
-	opr = '|'.join([re.escape(o) for o in [*oper.keys()] + ['~']])
+	opr = '|'.join([re.escape(o) for o in oper.keys()])
 	opr2 = ''.join([*oper.keys()])
 
 	regex = r"([^?%s]+)(?:(%s)(.+))?" % (opr2, opr)
