@@ -23,7 +23,7 @@ underneath, **NUM**s and **TXT**s are really all strings, but **NUM**s are conve
 | `_o` | colon `:` |
 | `_n` | newline `\n` |
 | `_t` | tilde `~` |
-| `_b` | backtick ````` |
+| `_b` | backtick `` ` `` |
 | `_a` | lowercase english alphabet |
 | `_i` | numbers 0-9 |
 | `__` | nothing |
@@ -51,7 +51,7 @@ example: `^a+^b` would produce the `3` if **VAR** `a` was the **NUM** `1` and **
 | < | operand 1 is less than operand 2 | `0 < ^a` |
 | > | operand 2 is greater than operand 2 | `^i > 1000` |
 | = | operand 1 is equal to operand 2 | `^f = 3` |
-| ` | operand 1 to the power of operand 2 | ``^g \` 2`` |
+| ` | operand 1 to the power of operand 2 | ``^g ` 2`` |
 | ~ | apply special type | `^m ~ p` |
 
 | special type | purpose | example |
