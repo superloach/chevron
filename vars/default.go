@@ -10,6 +10,7 @@ var Default map[string]string = map[string]string{
 	"_e": "=",
 	"_o": ":",
 	"_n": "\n",
+	"_t": "~",
 	"_a": "abcdefghijklmnopqrstuvwxyz",
 	"_i": "0123456789",
 	"__": "",

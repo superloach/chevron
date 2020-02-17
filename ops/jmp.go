@@ -31,7 +31,7 @@ var Cmps map[string]Cmp = map[string]Cmp{
 	">": func(l string, r string) bool {
 		return l > r
 	},
-	"@": func(l string, r string) bool {
+	"~": func(l string, r string) bool {
 		return strings.Contains(r, l)
 	},
 }
