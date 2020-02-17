@@ -5,11 +5,14 @@ import "strings"
 func Find(line string) Op {
 	switch {
 	case len(line) >= 1 && line[:1] == ":":
-		return LBL{line[1:]}
+		name := strings.Trim(line[1:], " ")
+		return LBL{name}
 	case len(line) >= 2 && line[:2] == "<>":
-		return COM{line[2:]}
+		cont := strings.Trim(line[2:], " ")
+		return COM{cont}
 	case len(line) >= 2 && line[:2] == "><":
-		return DIE{line[2:]}
+		msg := strings.Trim(line[2:], " ")
+		return DIE{msg}
 	case len(line) >= 2 && line[:2] == "->":
 		switch {
 		case strings.Contains(line[2:], "??"):
