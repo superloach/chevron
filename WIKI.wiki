@@ -119,9 +119,13 @@ example: <code>^a+^b</code> would produce the <code>3</code> if '''VAR''' <code>
 | operand 1 is equal to operand 2
 | <code>^f = 3</code>
 |-
-| <code>| operand 1 to the power of operand 2 | ``^g</code> 2`<code>| | ~ | apply special type |</code>^m ~ p`
-|
-|
+| `
+| operand 1 to the power of operand 2
+| <code>^g ` 2<code>
+|-
+| ~
+| apply special type
+| <code>^m ~ p</code>
 |}
 
 {|
@@ -174,7 +178,7 @@ example: <code>^a+^b</code> would produce the <code>3</code> if '''VAR''' <code>
 | <code>^a ~ s</code>
 |-
 | f
-| index operand 1
+| find in operand 1
 | <code>abc,b ~ f</code>
 |}
 
