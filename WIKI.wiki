@@ -253,4 +253,5 @@ each line is interpreted as one of the following operations:
 | text
 |}
 
+(HOP/SKP/JMP line: MAT line number or label name; prepending with <code>+</code> or <code>-</code> makes relative) (JMP comparisons: <code>=</code> for equality, <code>&lt;</code> for before, <code>&gt;</code> for after, <code>~</code> for contains)
 (JMP comparisons: <code>=</code> for equality, <code>&lt;</code> for before, <code>&gt;</code> for after, <code>~</code> for contains)

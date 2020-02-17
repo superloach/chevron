@@ -32,7 +32,7 @@ func (t TIN) Run(v *vars.Vars) error {
 	if err != nil {
 		return err
 	}
-	value := TINScanner.Text()
+	value := Clean(TINScanner.Text())
 
 	v.Set(t.Var, value)
 

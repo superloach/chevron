@@ -1,7 +1,7 @@
 <>benchmark.ch
 >^__>>^m
 0>>^i
-:for
+:l
 ^i+1>>^i
-->for?^i<^m
+->l?^i<^m
 ><done

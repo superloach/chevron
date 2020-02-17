@@ -4,9 +4,9 @@
 ^r~r>>^n
 ^n,0~d>>^n
 ^n+1>>^n
-:loop
+:l
 >guess: >>^g
-->end?^g=^n
-->loop
-:end
+->x?^g=^n
+->l
+:x
 ><good job

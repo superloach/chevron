@@ -33,7 +33,7 @@ func (n NIN) Run(v *vars.Vars) error {
 	if err != nil {
 		return err
 	}
-	expr := NINScanner.Text()
+	expr := Clean(NINScanner.Text())
 
 	val, err := strconv.ParseFloat(expr, 64)
 	if err != nil {

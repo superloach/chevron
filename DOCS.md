@@ -88,4 +88,5 @@ each line is interpreted as one of the following operations:
 | JMP | line change on MIX comparison | `->MAT??MIX=MIX` | line, text 1, text 2 |
 | DIE | exit program | `><MIX` | text |
 
+(HOP/SKP/JMP line: MAT line number or label name; prepending with `+` or `-` makes relative)
 (JMP comparisons: `=` for equality, `<` for before, `>` for after, `~` for contains)

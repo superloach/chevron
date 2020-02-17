@@ -18,7 +18,7 @@ yeet>^c
 
 <>NAS
 1+2>>^d
->^_ud is ^d
+>1 + 2 is ^d
 
 <>NAS
 ^a,1~c>>^e
@@ -33,60 +33,66 @@ yeet>^c
 >^b prime ^g
 
 <>HOP
-->afterhop
+->a
 >universe is broken
-->exithop
-:afterhop
+->b
+:a
 >universe is working
-:exithop
+:b
+
+<>HOP
+->+3
+>relative broke?
+->+2
+>relative works :)
 
 <>SKP
-->afterskp1?1>0
+->c?1>0
 >1 less than or equal to 0
-->exitskp1
-:afterskp1
+->d
+:c
 >1 greater than 0
-:exitskp1
+:d
 
 <>SKP
-->afterskp2?0>1
+->e?0>1
 >0 less than or equal to 1
-->exitskp2
-:afterskp2
+->f
+:e
 >0 greater than 1
-:exitskp2
+:f
 
 <>JMP
-->afterjmp1??yeet=yeet
+->g??yeet=yeet
 >yeet isn't yeet
-->exitjmp1
-:afterjmp1
+->h
+:g
 >yeet is yeet
-:exitjmp1
+:h
 
 <>JMP
-->afterjmp2??yeet=yote
+->i??yeet=yote
 >yeet isn't yote
-->exitjmp2
-:afterjmp2
+->j
+:i
 >yeet is yote
-:exitjmp2
+:j
 
 <>JMP
-->afterjmp3??a<b
+->k??a<b
 >a after/is b
-->exitjmp3
-:afterjmp3
+->l
+:k
 >a before b
-:exitjmp3
+:l
 
 <>JMP
-->afterjmp4??a~abc
+->m??a~abc
 >a not in abc
-->exitjmp4
-:afterjmp4
+->n
+:m
 >a in abc
-:exitjmp4
+:n
 
 <>DIE
 ><bye-bye!
