@@ -1,6 +1,7 @@
 package ops
 
 import (
+	"io"
 	"strconv"
 
 	"github.com/superloach/chevron/mat"
@@ -9,15 +10,15 @@ import (
 
 type SKP struct {
 	Rel string
-	To string
-	If string
+	To  string
+	If  string
 }
 
 func (s SKP) String() string {
 	return "SKP `" + s.Rel + "` `" + s.To + "` `" + s.If + "`"
 }
 
-func (s SKP) Run(v *vars.Vars) error {
+func (s SKP) Run(v *vars.Vars, r io.Reader, w io.Writer) error {
 	ifs, err := mat.Mat(s.If, v)
 	if err != nil {
 		return err
@@ -29,7 +30,7 @@ func (s SKP) Run(v *vars.Vars) error {
 	}
 
 	if ifn != 0 {
-		return HOP{s.Rel, s.To}.Run(v)
+		return HOP{s.Rel, s.To}.Run(v, r, w)
 	}
 
 	return nil

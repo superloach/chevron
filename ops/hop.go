@@ -1,24 +1,25 @@
 package ops
 
 import (
+	"io"
 	"strconv"
 
+	"github.com/superloach/chevron/errs"
 	"github.com/superloach/chevron/mat"
 	"github.com/superloach/chevron/mix"
 	"github.com/superloach/chevron/vars"
-	"github.com/superloach/chevron/errs"
 )
 
 type HOP struct {
 	Rel string
-	To string
+	To  string
 }
 
 func (h HOP) String() string {
 	return "HOP `" + h.Rel + "` `" + h.To + "`"
 }
 
-func (h HOP) Run(v *vars.Vars) error {
+func (h HOP) Run(v *vars.Vars, _ io.Reader, _ io.Writer) error {
 	val, err := mix.Mix(h.To, v)
 	if err != nil {
 		return err

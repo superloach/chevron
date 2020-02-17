@@ -1,6 +1,7 @@
 package ops
 
 import (
+	"io"
 	"strings"
 
 	"github.com/superloach/chevron/errs"
@@ -45,7 +46,7 @@ func AllCmps() string {
 	return r
 }
 
-func (j JMP) Run(v *vars.Vars) error {
+func (j JMP) Run(v *vars.Vars, r io.Reader, w io.Writer) error {
 	lhs, err := mix.Mix(j.Lh, v)
 	if err != nil {
 		return err
@@ -62,7 +63,7 @@ func (j JMP) Run(v *vars.Vars) error {
 	}
 
 	if cmp(lhs, rhs) {
-		return HOP{j.Rel, j.To}.Run(v)
+		return HOP{j.Rel, j.To}.Run(v, r, w)
 	}
 
 	return nil

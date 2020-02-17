@@ -2,14 +2,12 @@ package ops
 
 import (
 	"bufio"
-	"os"
+	"io"
 	"strconv"
 
 	"github.com/superloach/chevron/mix"
 	"github.com/superloach/chevron/vars"
 )
-
-var NINScanner = bufio.NewScanner(os.Stdin)
 
 type NIN struct {
 	Prompt string
@@ -20,20 +18,21 @@ func (n NIN) String() string {
 	return "NIN `" + n.Prompt + "` `" + n.Var + "`"
 }
 
-func (n NIN) Run(v *vars.Vars) error {
+func (n NIN) Run(v *vars.Vars, r io.Reader, w io.Writer) error {
 	text, err := mix.Mix(n.Prompt, v)
 	if err != nil {
 		return err
 	}
 
-	print(text)
+	w.Write([]byte(text))
 
-	NINScanner.Scan()
-	err = NINScanner.Err()
+	scn := bufio.NewScanner(r)
+	scn.Scan()
+	err = scn.Err()
 	if err != nil {
 		return err
 	}
-	expr := Clean(NINScanner.Text())
+	expr := Clean(scn.Text())
 
 	val, err := strconv.ParseFloat(expr, 64)
 	if err != nil {

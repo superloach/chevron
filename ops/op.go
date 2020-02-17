@@ -1,8 +1,12 @@
 package ops
 
-import "github.com/superloach/chevron/vars"
+import (
+	"io"
+
+	"github.com/superloach/chevron/vars"
+)
 
 type Op interface {
-	Run(*vars.Vars) error
+	Run(*vars.Vars, io.Reader, io.Writer) error
 	String() string
 }

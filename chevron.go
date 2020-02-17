@@ -3,6 +3,7 @@ package chevron
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"strconv"
 	"strings"
@@ -18,6 +19,8 @@ type Chevron struct {
 	Lines   []string
 	Program []ops.Op
 	Vars    *vars.Vars
+	Out     io.Writer
+	In      io.Reader
 	Debug   bool
 }
 
@@ -102,7 +105,7 @@ func (ch *Chevron) Step() error {
 	op := ch.Program[linenum-1]
 	ch.DebugPrint("op", op.String())
 
-	err = op.Run(ch.Vars)
+	err = op.Run(ch.Vars, ch.In, ch.Out)
 	if err != nil {
 		return err
 	}

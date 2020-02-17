@@ -31,6 +31,9 @@ func main() {
 		panic(err)
 	}
 
+	ch.In = os.Stdin
+	ch.Out = os.Stdout
+
 	for err == nil {
 		err = ch.Step()
 	}
