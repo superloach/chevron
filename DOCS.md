@@ -81,11 +81,11 @@ each line is interpreted as one of the following operations:
 | OUT | output | `>MIX` | text |
 | TIN | TXT input | `>MIX>VAR` | prompt, target |
 | NIN | NUM input | `>MIX>>VAR` | prompt, target |
-| TAS | TXT assignment | `MIX>VAR` | target, text |
-| NAS | NUM assignment | `MAT>>VAR` | target, expression |
+| TAS | TXT assignment | `MIX>VAR` | text, target |
+| NAS | NUM assignment | `MAT>>VAR` | expression, target |
 | HOP | line change | `->MAT` | line |
 | SKP | line change on MAT condition | `->MAT?MAT` | line, expression |
 | JMP | line change on MIX comparison | `->MAT??MIX=MIX` | line, text 1, text 2 |
 | DIE | exit program | `><MIX` | text |
 
-(JMP comparisons: `=` for equality, `<` for before, `>` for after, `@` for contains)
+(JMP comparisons: `=` for equality, `<` for before, `>` for after, `~` for contains)
