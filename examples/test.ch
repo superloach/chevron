@@ -21,12 +21,16 @@ yeet>^c
 >^_ud is ^d
 
 <>NAS
-^c,1~c>>^e
->first letter of ^c is ^e
+^a,1~c>>^e
+>first letter of your name is ^e
 
 <>NAS
-^b~p>>^f
->^b prime ^f
+^a~s>>^f
+>your name is ^f letters long
+
+<>NAS
+^b~p>>^g
+>^b prime ^g
 
 <>HOP
 ->afterhop
@@ -77,7 +81,7 @@ yeet>^c
 :exitjmp3
 
 <>JMP
-->afterjmp4??a@abc
+->afterjmp4??a~abc
 >a not in abc
 ->exitjmp4
 :afterjmp4

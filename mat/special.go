@@ -114,4 +114,7 @@ var STxtOps map[string]STxtOp = map[string]STxtOp{
 			return "", errs.Err("too many parts")
 		}
 	},
+	"s": func(s string) (string, error) {
+		return strconv.Itoa(len(s)), nil
+	},
 }
