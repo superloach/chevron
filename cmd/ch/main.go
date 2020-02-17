@@ -26,17 +26,17 @@ func main() {
 	default:
 	}
 
-	cv, err := chevron.Load(*src, args, *debug)
+	ch, err := chevron.Load(*src, args, *debug)
 	if err != nil {
 		panic(err)
 	}
 
 	for err == nil {
-		err = cv.Step()
+		err = ch.Step()
 	}
 
 	if !errs.Okay(err) {
-		ln, lnerr := cv.Vars.Get("_#")
+		ln, lnerr := ch.Vars.Get("_#")
 		if lnerr != nil {
 			panic(lnerr)
 		}

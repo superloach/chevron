@@ -22,18 +22,18 @@ type Chevron struct {
 }
 
 func Load(src string, args []string, debug bool) (*Chevron, error) {
-	cv := Chevron{}
+	ch := Chevron{}
 
-	cv.Src = src
-	cv.Args = args
-	cv.Debug = debug
-	cv.Lines = make([]string, 0)
-	cv.Program = make([]ops.Op, 0)
-	cv.Vars = vars.MkVars()
+	ch.Src = src
+	ch.Args = args
+	ch.Debug = debug
+	ch.Lines = make([]string, 0)
+	ch.Program = make([]ops.Op, 0)
+	ch.Vars = vars.MkVars()
 
-	file, err := os.Open(cv.Src)
+	file, err := os.Open(ch.Src)
 	if err != nil {
-		return &cv, err
+		return &ch, err
 	}
 
 	scanner := bufio.NewScanner(file)
@@ -44,37 +44,37 @@ func Load(src string, args []string, debug bool) (*Chevron, error) {
 			switch op.(type) {
 			case ops.LBL:
 				lbl := op.(ops.LBL)
-				val := strconv.Itoa(len(cv.Lines) + 1)
-				cv.Vars.Set(":"+lbl.Name, val)
+				val := strconv.Itoa(len(ch.Lines) + 1)
+				ch.Vars.Set(":"+lbl.Name, val)
 			default:
 			case ops.BAD:
-				return &cv, op.(ops.BAD)
+				return &ch, op.(ops.BAD)
 			}
-			cv.Lines = append(cv.Lines, l)
-			cv.Program = append(cv.Program, op)
+			ch.Lines = append(ch.Lines, l)
+			ch.Program = append(ch.Program, op)
 		}
 	}
 
 	err = scanner.Err()
 	if err != nil {
-		return &cv, err
+		return &ch, err
 	}
 
-	cv.Vars.Set("_s", src)
-	cv.Vars.Set("_#", "1")
-	cv.Vars.Set("_g", strings.Join(cv.Args, "\x00"))
+	ch.Vars.Set("_s", src)
+	ch.Vars.Set("_#", "1")
+	ch.Vars.Set("_g", strings.Join(ch.Args, "\x00"))
 
-	return &cv, nil
+	return &ch, nil
 }
 
-func (cv *Chevron) DebugPrint(args ...interface{}) {
-	if cv.Debug {
+func (ch *Chevron) DebugPrint(args ...interface{}) {
+	if ch.Debug {
 		fmt.Println(args...)
 	}
 }
 
-func (cv *Chevron) Step() error {
-	lns, err := cv.Vars.Get("_#")
+func (ch *Chevron) Step() error {
+	lns, err := ch.Vars.Get("_#")
 	if err != nil {
 		return err
 	}
@@ -84,31 +84,31 @@ func (cv *Chevron) Step() error {
 		return err
 	}
 
-	if linenum > len(cv.Program) {
+	if linenum > len(ch.Program) {
 		return errs.EOF
 	}
 
-	cv.DebugPrint("linenum", linenum)
-	cv.DebugPrint("line", cv.Lines[linenum-1])
+	ch.DebugPrint("linenum", linenum)
+	ch.DebugPrint("line", ch.Lines[linenum-1])
 
-	op := cv.Program[linenum-1]
-	cv.DebugPrint("op", op.String())
+	op := ch.Program[linenum-1]
+	ch.DebugPrint("op", op.String())
 
-	err = op.Run(cv.Vars)
+	err = op.Run(ch.Vars)
 	if err != nil {
 		return err
 	}
 
 	lns = strconv.Itoa(linenum)
 
-	nlns, err := cv.Vars.Get("_#")
+	nlns, err := ch.Vars.Get("_#")
 	if err != nil {
 		return err
 	}
 
 	if lns == nlns {
 		linenum++
-		cv.Vars.Set("_#", strconv.Itoa(linenum))
+		ch.Vars.Set("_#", strconv.Itoa(linenum))
 	}
 
 	return err
