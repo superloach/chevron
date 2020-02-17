@@ -26,7 +26,7 @@ func main() {
 	default:
 	}
 
-	ch, err := chevron.Load(*src, args, *debug)
+	ch, err := chevron.LoadFile(*src, args, *debug)
 	if err != nil {
 		panic(err)
 	}

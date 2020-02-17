@@ -36,6 +36,13 @@ var SNumOps map[string]SNumOp = map[string]SNumOp{
 			return 0, nil
 		}
 	},
+	"b": func(n float64) (float64, error) {
+		if n == 0 {
+			return 0, nil
+		} else {
+			return 1, nil
+		}
+	},
 }
 
 var STxtOps map[string]STxtOp = map[string]STxtOp{

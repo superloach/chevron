@@ -62,6 +62,7 @@ example: `^a+^b` would produce the `3` if **VAR** `a` was the **NUM** `1` and **
 | o | is operand 1 odd | `^n ~ o` |
 | e | is operand 1 even | `^n ~ e` |
 | r | random **NUM** between 0 and operand 1 | `100 ~ r` |
+| b | boolean value of operand 1 | `0 ~ b` |
 | n | boolean negation of operand 1 | `1 ~ n` |
 | l | lowercase of operand 1 | `^t ~ l` |
 | u | uppercase of operand 1 | `^t ~ u` |

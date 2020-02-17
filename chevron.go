@@ -21,24 +21,38 @@ type Chevron struct {
 	Debug   bool
 }
 
-func Load(src string, args []string, debug bool) (*Chevron, error) {
+func LoadFile(src string, args []string, debug bool) (*Chevron, error) {
+	file, err := os.Open(src)
+	if err != nil {
+		return nil, err
+	}
+
+	code := ""
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		l := scanner.Text()
+		code += l + "\n"
+	}
+
+	err = scanner.Err()
+	if err != nil {
+		return nil, err
+	}
+
+	return Load(code, args, debug)
+}
+
+func Load(code string, args []string, debug bool) (*Chevron, error) {
 	ch := Chevron{}
 
-	ch.Src = src
 	ch.Args = args
 	ch.Debug = debug
 	ch.Lines = make([]string, 0)
 	ch.Program = make([]ops.Op, 0)
 	ch.Vars = vars.MkVars()
 
-	file, err := os.Open(ch.Src)
-	if err != nil {
-		return &ch, err
-	}
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		l := scanner.Text()
+	for _, l := range strings.Split(code, "\n") {
 		op := ops.Find(l)
 		if op != nil {
 			switch op.(type) {
@@ -55,12 +69,6 @@ func Load(src string, args []string, debug bool) (*Chevron, error) {
 		}
 	}
 
-	err = scanner.Err()
-	if err != nil {
-		return &ch, err
-	}
-
-	ch.Vars.Set("_s", src)
 	ch.Vars.Set("_#", "1")
 	ch.Vars.Set("_g", strings.Join(ch.Args, "\x00"))
 
