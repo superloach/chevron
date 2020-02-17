@@ -1,10 +1,11 @@
 package main
 
 import (
-	"strings"
+	"io"
 	"syscall/js"
 
 	"github.com/superloach/chevron"
+	"github.com/superloach/chevron/errs"
 )
 
 func br() js.Value {
@@ -22,6 +23,39 @@ var inp js.Value
 var run js.Value
 var out js.Value
 
+type textareaReader struct {
+	textarea js.Value
+	index int
+}
+
+func (r *textareaReader) Read(p []byte) (int, error) {
+	i := 0
+	v := r.textarea.Get("value").String()
+	for i < len(p) && r.index + i < len(v) {
+		println(r.index + i, len(v))
+		b := v[r.index + i]
+		if b == '\n' {
+			r.index += i + 1
+			return i, io.EOF
+		}
+		p[i] = b
+		i++
+	}
+	r.index += i + 1
+	return i, io.EOF
+}
+
+type textareaWriter struct {
+	textarea js.Value
+}
+
+func (w *textareaWriter) Write(p []byte) (int, error) {
+	v := w.textarea.Get("value").String()
+	v += string(p)
+	w.textarea.Set("value", v)
+	return len(p), nil
+}
+
 func runF(this js.Value, _ []js.Value) interface{} {
 	code := src.Get("value").String()
 	args := []string{}
@@ -32,13 +66,22 @@ func runF(this js.Value, _ []js.Value) interface{} {
 		window.Call("alert", err.Error())
 	}
 
-	ch.In = strings.NewReader(inp.Get("value").String())
-	stdout := &strings.Builder{}
+	stdin := &textareaReader{inp, 0}
+	ch.In = stdin
+
+	stdout := &textareaWriter{out}
 	ch.Out = stdout
 
 	for err == nil {
 		err = ch.Step()
-		out.Set("value", stdout.String())
+	}
+
+	if !errs.Okay(err) {
+		ln, lnerr := ch.Vars.Get("_#")
+		if lnerr != nil {
+			panic(lnerr)
+		}
+		window.Call("alert", "error on line " + ln + ": " + err.Error())
 	}
 
 	return nil
