@@ -12,6 +12,7 @@ underneath, **NUM**s and **TXT**s are really all strings, but **NUM**s are conve
 | special var | value |
 | --- | --- |
 | `_#` | current line **NUM** |
+| `_c` | last comment |
 | `_r` | greater than `>` |
 | `_l` | less than `<` |
 | `_u` | caret `^` |
@@ -62,6 +63,7 @@ example: `^a+^b` would produce the `3` if **VAR** `a` was the **NUM** `1` and **
 | u | uppercase of operand 1 | `^t ~ u` |
 | v | reverse of operand 1 | `hello ~ v` |
 | d | round operand 1 | `3.1415,2 ~ d` |
+| c | cut operand 1 | `hello,1,4 ~ c`
 
 operations
 ----------

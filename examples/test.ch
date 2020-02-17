@@ -21,7 +21,7 @@ yeet>^c
 >^_ud is ^d
 
 <>NAS
-^c,0~c>>^e
+^c,1~c>>^e
 >first letter of ^c is ^e
 
 <>NAS
@@ -46,10 +46,10 @@ yeet>^c
 
 <>SKP
 ->afterskp2?0>1
->0 greater than or equal to 1
+>0 less than or equal to 1
 ->exitskp2
 :afterskp2
->0 less than 1
+>0 greater than 1
 :exitskp2
 
 <>JMP
