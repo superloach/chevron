@@ -1,5 +1,7 @@
 # custom ignores
-chevron
+/ch
+/wasmserve
+/web/main.wasm
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
