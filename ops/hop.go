@@ -20,15 +20,18 @@ func (h HOP) String() string {
 }
 
 func (h HOP) Run(v *vars.Vars, _ io.Reader, _ io.Writer) error {
-	val, err := mix.Mix(h.To, v)
+	lbln, err := mix.Mix(h.To, v)
 	if err != nil {
 		return err
 	}
 
-	lbl, _ := v.Get(":" + val)
+	val := h.To
+
+	lbl, _ := v.Get(":" + lbln)
 	if lbl != "" {
 		val = lbl
 	}
+
 	val, err = mat.Mat(val, v)
 	if err != nil {
 		return err

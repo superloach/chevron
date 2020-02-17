@@ -32,7 +32,7 @@ func (n NIN) Run(v *vars.Vars, r io.Reader, w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	expr := Clean(scn.Text())
+	expr := scn.Text()
 
 	val, err := strconv.ParseFloat(expr, 64)
 	if err != nil {

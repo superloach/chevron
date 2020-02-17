@@ -31,7 +31,7 @@ func (t TIN) Run(v *vars.Vars, r io.Reader, w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	value := Clean(scn.Text())
+	value := scn.Text()
 
 	v.Set(t.Var, value)
 

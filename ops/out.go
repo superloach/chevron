@@ -20,6 +20,7 @@ func (o OUT) Run(v *vars.Vars, _ io.Reader, w io.Writer) error {
 	if err != nil {
 		return err
 	}
+
 	w.Write([]byte(text))
 	w.Write([]byte{'\n'})
 
