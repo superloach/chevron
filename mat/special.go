@@ -117,4 +117,12 @@ var STxtOps map[string]STxtOp = map[string]STxtOp{
 	"s": func(s string) (string, error) {
 		return strconv.Itoa(len(s)), nil
 	},
+	"f": func(s string) (string, error) {
+		parts := strings.Split(s, ",")
+		if len(parts) != 2 {
+			return "", errs.Err("wrong number of parts")
+		}
+
+		return strconv.Itoa(strings.Index(parts[0], parts[1]) + 1), nil
+	},
 }

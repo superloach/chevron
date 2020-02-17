@@ -66,6 +66,8 @@ example: `^a+^b` would produce the `3` if **VAR** `a` was the **NUM** `1` and **
 | v | reverse of operand 1 | `hello ~ v` |
 | d | round operand 1 | `3.1415,2 ~ d` |
 | c | cut operand 1 | `hello,1,4 ~ c`
+| s | size of operand 1 | `^a ~ s` |
+| f | index operand 1 | `abc,b ~ i` |
 
 operations
 ----------
