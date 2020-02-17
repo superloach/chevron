@@ -5,14 +5,16 @@ import (
 
 	"github.com/superloach/chevron/mat"
 	"github.com/superloach/chevron/vars"
+	"github.com/superloach/chevron/errs"
 )
 
 type HOP struct {
+	Rel string
 	To string
 }
 
 func (h HOP) String() string {
-	return "HOP `" + h.To + "`"
+	return "HOP `" + h.Rel + "` `" + h.To + "`"
 }
 
 func (h HOP) Run(v *vars.Vars) error {
@@ -31,6 +33,32 @@ func (h HOP) Run(v *vars.Vars) error {
 	num, err := strconv.ParseFloat(val, 64)
 	if err != nil {
 		return err
+	}
+	switch h.Rel {
+	case "":
+		break
+	case "+":
+		cs, err := v.Get("_#")
+		if err != nil {
+			return err
+		}
+		cur, err := strconv.ParseFloat(cs, 64)
+		if err != nil {
+			return err
+		}
+		num = cur + num
+	case "-":
+		cs, err := v.Get("_#")
+		if err != nil {
+			return err
+		}
+		cur, err := strconv.ParseFloat(cs, 64)
+		if err != nil {
+			return err
+		}
+		num = cur - num
+	default:
+		return errs.Err("unknown relative operator")
 	}
 	val = strconv.Itoa(int(num))
 	v.Set("_#", val)

@@ -8,12 +8,13 @@ import (
 )
 
 type SKP struct {
+	Rel string
 	To string
 	If string
 }
 
 func (s SKP) String() string {
-	return "SKP `" + s.To + "` `" + s.If + "`"
+	return "SKP `" + s.Rel + "` `" + s.To + "` `" + s.If + "`"
 }
 
 func (s SKP) Run(v *vars.Vars) error {
@@ -28,7 +29,7 @@ func (s SKP) Run(v *vars.Vars) error {
 	}
 
 	if ifn != 0 {
-		return HOP{s.To}.Run(v)
+		return HOP{s.Rel, s.To}.Run(v)
 	}
 
 	return nil

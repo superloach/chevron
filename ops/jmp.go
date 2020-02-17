@@ -9,6 +9,7 @@ import (
 )
 
 type JMP struct {
+	Rel string
 	To  string
 	Lh  string
 	Cmp string
@@ -16,7 +17,7 @@ type JMP struct {
 }
 
 func (j JMP) String() string {
-	return "JMP `" + j.To + "` `" + j.Lh + "` `" + j.Cmp + "` `" + j.Rh + "`"
+	return "JMP `" + j.Rel + "` `" + j.To + "` `" + j.Lh + "` `" + j.Cmp + "` `" + j.Rh + "`"
 }
 
 type Cmp func(string, string) bool
@@ -61,7 +62,7 @@ func (j JMP) Run(v *vars.Vars) error {
 	}
 
 	if cmp(lhs, rhs) {
-		return HOP{j.To}.Run(v)
+		return HOP{j.Rel, j.To}.Run(v)
 	}
 
 	return nil

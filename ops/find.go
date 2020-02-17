@@ -29,26 +29,44 @@ func Find(line string) Op {
 				return BAD{line, "no cmp"}
 			}
 
+			rel := ""
 			to := strings.Trim(parts[0], " ")
 			lh := strings.Trim(parts[1][:opi], " ")
 			op := strings.Trim(parts[1][opi:opi+1], " ")
 			rh := strings.Trim(parts[1][opi+1:], " ")
 
-			return JMP{to, lh, op, rh}
+			if len(to) >= 1 && (to[0] == '+' || to[0] == '-') {
+				rel = to[:1]
+				to = strings.Trim(to[1:], " ")
+			}
+
+			return JMP{rel, to, lh, op, rh}
 		case strings.Contains(line[2:], "?"):
 			parts := strings.Split(line[2:], "?")
 			if len(parts) != 2 {
 				return BAD{line, "wrong number of parts"}
 			}
 
+			rel := ""
 			to := strings.Trim(parts[0], " ")
 			ifs := strings.Trim(parts[1], " ")
 
-			return SKP{to, ifs}
+			if len(to) >= 1 && (to[0] == '+' || to[0] == '-') {
+				rel = to[:1]
+				to = strings.Trim(to[1:], " ")
+			}
+
+			return SKP{rel, to, ifs}
 		default:
+			rel := ""
 			to := strings.Trim(line[2:], " ")
 
-			return HOP{to}
+			if len(to) >= 1 && (to[0] == '+' || to[0] == '-') {
+				rel = to[:1]
+				to = strings.Trim(to[1:], " ")
+			}
+
+			return HOP{rel, to}
 		}
 	case len(line) >= 1 && line[:1] == ">":
 		switch {
