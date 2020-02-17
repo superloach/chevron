@@ -34,8 +34,13 @@ func Mat(expr string, v *vars.Vars) (string, error) {
 			if !ok {
 				return "0", errs.Err("unknown special op " + so)
 			}
-			txt, err := sto(expr[:opi])
-			return txt, err
+			txt1 := strings.ReplaceAll(expr[:opi], ",", "\x00")
+			txt2, err := mix.Mix(txt1, v)
+			if err != nil {
+				return "0", err
+			}
+			txt3, err := sto(txt2)
+			return txt3, err
 		}
 		n, err := strconv.ParseFloat(expr[:opi], 64)
 		if err != nil {

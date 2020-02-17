@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/superloach/chevron/mat"
+	"github.com/superloach/chevron/mix"
 	"github.com/superloach/chevron/vars"
 	"github.com/superloach/chevron/errs"
 )
@@ -18,17 +19,18 @@ func (h HOP) String() string {
 }
 
 func (h HOP) Run(v *vars.Vars) error {
-	val := "0"
-	val, err := mat.Mat(h.To, v)
+	val, err := mix.Mix(h.To, v)
 	if err != nil {
-		lbl, _ := v.Get(":" + h.To)
-		if lbl == "" {
-			return err
-		}
-		val, err = mat.Mat(lbl, v)
-		if err != nil {
-			return err
-		}
+		return err
+	}
+
+	lbl, _ := v.Get(":" + val)
+	if lbl != "" {
+		val = lbl
+	}
+	val, err = mat.Mat(val, v)
+	if err != nil {
+		return err
 	}
 	num, err := strconv.ParseFloat(val, 64)
 	if err != nil {
@@ -60,7 +62,7 @@ func (h HOP) Run(v *vars.Vars) error {
 	default:
 		return errs.Err("unknown relative operator")
 	}
-	val = strconv.Itoa(int(num))
-	v.Set("_#", val)
+	value := strconv.Itoa(int(num))
+	v.Set("_#", value)
 	return nil
 }

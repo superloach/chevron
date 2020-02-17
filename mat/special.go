@@ -53,7 +53,7 @@ var STxtOps map[string]STxtOp = map[string]STxtOp{
 		return string(runes), nil
 	},
 	"d": func(s string) (string, error) {
-		parts := strings.Split(s, ",")
+		parts := strings.Split(s, "\x00")
 		if len(parts) == 0 {
 			return "", errs.Err("empty round")
 		}
@@ -76,7 +76,7 @@ var STxtOps map[string]STxtOp = map[string]STxtOp{
 		}
 	},
 	"c": func(s string) (string, error) {
-		parts := strings.Split(s, ",")
+		parts := strings.Split(s, "\x00")
 		if len(parts) == 0 {
 			return "", errs.Err("empty cut")
 		}
@@ -118,11 +118,25 @@ var STxtOps map[string]STxtOp = map[string]STxtOp{
 		return strconv.Itoa(len(s)), nil
 	},
 	"f": func(s string) (string, error) {
-		parts := strings.Split(s, ",")
+		parts := strings.Split(s, "\x00")
 		if len(parts) != 2 {
 			return "", errs.Err("wrong number of parts")
 		}
 
 		return strconv.Itoa(strings.Index(parts[0], parts[1]) + 1), nil
+	},
+	"a": func(s string) (string, error) {
+		code, err := strconv.Atoi(s)
+		if err != nil {
+			return "", err
+		}
+		return string([]rune{rune(code)}), nil
+	},
+	"x": func(s string) (string, error) {
+		num, err := strconv.ParseInt(s, 16, 64)
+		if err != nil {
+			return "", err
+		}
+		return strconv.Itoa(int(num)), nil
 	},
 }

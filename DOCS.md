@@ -24,6 +24,8 @@ underneath, **NUM**s and **TXT**s are really all strings, but **NUM**s are conve
 | `_n` | newline `\n` |
 | `_t` | tilde `~` |
 | `_b` | backtick `` ` `` |
+| `_m` | comma `,` |
+| `_p` | space ` ` |
 | `_a` | lowercase english alphabet |
 | `_i` | numbers 0-9 |
 | `__` | nothing |

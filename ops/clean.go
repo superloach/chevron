@@ -13,6 +13,8 @@ func Clean(s string) string {
 	s = strings.ReplaceAll(s, ":", "^_o")
 	s = strings.ReplaceAll(s, "\n", "^_n")
 	s = strings.ReplaceAll(s, "~", "^_t")
+	s = strings.ReplaceAll(s, "`", "^_b")
 	s = strings.ReplaceAll(s, ",", "^_m")
+	s = strings.ReplaceAll(s, " ", "^_p")
 	return s
 }

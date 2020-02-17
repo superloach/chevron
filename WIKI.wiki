@@ -59,6 +59,12 @@ underneath, '''NUM'''s and '''TXT'''s are really all strings, but '''NUM'''s are
 | <code>_b</code>
 | backtick <code>`</code>
 |-
+| <code>_m</code>
+| comma <code>,</code>
+|-
+| <code>_p</code>
+| space <code> </code>
+|-
 | <code>_a</code>
 | lowercase english alphabet
 |-
