@@ -26,6 +26,8 @@ var out js.Value
 type textareaReader struct {
 	textarea js.Value
 	index int
+	reading []byte
+	out io.Writer
 }
 
 func (r *textareaReader) Read(p []byte) (int, error) {
@@ -35,12 +37,15 @@ func (r *textareaReader) Read(p []byte) (int, error) {
 		println(r.index + i, len(v))
 		b := v[r.index + i]
 		if b == '\n' {
-			r.index += i + 1
-			return i, io.EOF
+			break
 		}
+		r.reading = append(r.reading, b)
 		p[i] = b
 		i++
 	}
+	r.reading = append(r.reading, '\n')
+	r.out.Write(r.reading)
+	r.reading = make([]byte, 0)
 	r.index += i + 1
 	return i, io.EOF
 }
@@ -66,11 +71,11 @@ func runF(this js.Value, _ []js.Value) interface{} {
 		window.Call("alert", err.Error())
 	}
 
-	stdin := &textareaReader{inp, 0}
-	ch.In = stdin
-
 	stdout := &textareaWriter{out}
 	ch.Out = stdout
+
+	stdin := &textareaReader{inp, 0, make([]byte, 0), stdout}
+	ch.In = stdin
 
 	for err == nil {
 		err = ch.Step()
