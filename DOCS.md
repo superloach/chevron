@@ -7,7 +7,7 @@ there are two data types, **NUM** (numbers) and **TXT** (text).
 
 underneath, **NUM**s and **TXT**s are really all strings, but **NUM**s are converted to floats for operations.
 
-**VAR**s (variables) are in the form `^c`, where `c` is any character. **VAR**s in the form `^_c` are special values.
+**VAR**s (variables) are in the form `^c`, where `c` is any single character. **VAR**s in the form `^_c` are special values. **LBL**s make **VAR**s in the form `^:c`.
 
 | special var | value |
 | --- | --- |
