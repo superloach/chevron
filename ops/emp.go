@@ -2,7 +2,7 @@ package ops
 
 import "github.com/superloach/chevron/vars"
 
-type EMP struct {}
+type EMP struct{}
 
 func (e EMP) String() string {
 	return "EMP"

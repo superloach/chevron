@@ -25,7 +25,7 @@ func Find(line string) Op {
 
 			to := strings.Trim(parts[0], " ")
 			lh := strings.Trim(parts[1][:opi], " ")
-			op := strings.Trim(parts[1][opi : opi+1], " ")
+			op := strings.Trim(parts[1][opi:opi+1], " ")
 			rh := strings.Trim(parts[1][opi+1:], " ")
 
 			return JMP{to, lh, op, rh}

@@ -3,7 +3,7 @@ package ops
 import "github.com/superloach/chevron/vars"
 
 type BAD struct {
-	Line string
+	Line   string
 	Reason string
 }
 

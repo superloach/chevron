@@ -20,6 +20,7 @@ func (j JMP) String() string {
 }
 
 type Cmp func(string, string) bool
+
 var Cmps map[string]Cmp = map[string]Cmp{
 	"=": func(l string, r string) bool {
 		return l == r

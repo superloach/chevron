@@ -2,7 +2,7 @@ package errs
 
 type At struct {
 	Line string
-	Err error
+	Err  error
 }
 
 func (a At) Error() string {
