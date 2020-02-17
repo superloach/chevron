@@ -1,0 +1,252 @@
+= about =
+
+chevron is an esoteric yet (somewhat) readable language.  it makes heavy use of the <code>&lt;</code>, <code>&gt;</code>, and <code>^</code> characters, hence its name.
+
+== install ==
+
+<code>go get -u github.com/superloach/chevron/cmd/ch</code>
+
+= docs =
+
+== data types ==
+
+there are two data types, '''NUM''' (numbers) and '''TXT''' (text).
+
+underneath, '''NUM'''s and '''TXT'''s are really all strings, but '''NUM'''s are converted to floats for operations.
+
+'''VAR'''s (variables) are in the form <code>^c</code>, where <code>c</code> is any character. '''VAR'''s in the form <code>^_c</code> are special values.
+
+{|
+! special var
+! value
+|-
+| <code>_#</code>
+| current line '''NUM'''
+|-
+| <code>_c</code>
+| last comment
+|-
+| <code>_r</code>
+| greater than <code>&gt;</code>
+|-
+| <code>_l</code>
+| less than <code>&lt;</code>
+|-
+| <code>_u</code>
+| caret <code>^</code>
+|-
+| <code>_q</code>
+| question mark <code>?</code>
+|-
+| <code>_d</code>
+| dash <code>-</code>
+|-
+| <code>_s</code>
+| underscore <code>_</code>
+|-
+| <code>_e</code>
+| equal <code>=</code>
+|-
+| <code>_o</code>
+| colon <code>:</code>
+|-
+| <code>_n</code>
+| newline <code>\n</code>
+|-
+| <code>_t</code>
+| tilde <code>~</code>
+|-
+| <code>_b</code>
+| backtick <code>`</code>
+|-
+| <code>_a</code>
+| lowercase english alphabet
+|-
+| <code>_i</code>
+| numbers 0-9
+|-
+| <code>__</code>
+| nothing
+|}
+
+== parsers ==
+
+'''MIX'''es (mixtures) are any text, and can resolve to a '''TXT''' (applying '''VAR''' values).
+
+example: <code>hi ^n!</code> would produce the '''TXT''' <code>hi terra!</code> if '''VAR''' <code>n</code> was the '''TXT''' <code>terra</code>.
+
+
+-----
+
+'''MAT'''s (mathematics) work similarly to '''MIX'''es, but use special 2-term expressions.
+
+example: <code>^a+^b</code> would produce the <code>3</code> if '''VAR''' <code>a</code> was the '''NUM''' <code>1</code> and '''VAR''' <code>b</code> was the '''NUM''' <code>2</code>.
+
+{|
+!width="33%"| type
+!width="33%"| purpose
+!width="33%"| example
+|-
+| +
+| sum of operand 1 and operand 2
+| <code>1 + ^a</code>
+|-
+| -
+| difference of operand 1 and operand 2
+| <code>^b - 2</code>
+|-
+| /
+| quotient of operand 1 and operand 2
+| <code>^n / 3</code>
+|-
+| *
+| product of operand 1 and operand 2
+| <code>^c * ^d</code>
+|-
+| %
+| modulus of operand 1 and operand 2
+| <code>5 % 3</code>
+|-
+| &lt;
+| operand 1 is less than operand 2
+| <code>0 &lt; ^a</code>
+|-
+| &gt;
+| operand 2 is greater than operand 2
+| <code>^i &gt; 1000</code>
+|-
+| =
+| operand 1 is equal to operand 2
+| <code>^f = 3</code>
+|-
+| <code>| operand 1 to the power of operand 2 | ``^g</code> 2`<code>| | ~ | apply special type |</code>^m ~ p`
+|
+|
+|}
+
+{|
+! special type
+! purpose
+! example
+|-
+| p
+| is operand 1 prime
+| <code>23 ~ p</code>
+|-
+| o
+| is operand 1 odd
+| <code>^n ~ o</code>
+|-
+| e
+| is operand 1 even
+| <code>^n ~ e</code>
+|-
+| r
+| random '''NUM''' between 0 and operand 1
+| <code>100 ~ r</code>
+|-
+| n
+| boolean negation of operand 1
+| <code>1 ~ n</code>
+|-
+| l
+| lowercase of operand 1
+| <code>^t ~ l</code>
+|-
+| u
+| uppercase of operand 1
+| <code>^t ~ u</code>
+|-
+| v
+| reverse of operand 1
+| <code>hello ~ v</code>
+|-
+| d
+| round operand 1
+| <code>3.1415,2 ~ d</code>
+|-
+| c
+| cut operand 1
+| <code>hello,1,4 ~ c</code>
+|-
+| s
+| size of operand 1
+| <code>^a ~ s</code>
+|-
+| f
+| index operand 1
+| <code>abc,b ~ f</code>
+|}
+
+== operations ==
+
+each line is interpreted as one of the following operations:
+
+{|
+! name
+! description
+! syntax
+! parser meanings
+|-
+| EMP
+| empty line
+| <code></code>
+|
+|-
+| COM
+| comment
+| <code>&lt;&gt;TXT</code>
+| contents
+|-
+| LBL
+| comment
+| <code>:TXT</code>
+| name
+|-
+| OUT
+| output
+| <code>&gt;MIX</code>
+| text
+|-
+| TIN
+| TXT input
+| <code>&gt;MIX&gt;VAR</code>
+| prompt, target
+|-
+| NIN
+| NUM input
+| <code>&gt;MIX&gt;&gt;VAR</code>
+| prompt, target
+|-
+| TAS
+| TXT assignment
+| <code>MIX&gt;VAR</code>
+| text, target
+|-
+| NAS
+| NUM assignment
+| <code>MAT&gt;&gt;VAR</code>
+| expression, target
+|-
+| HOP
+| line change
+| <code>-&gt;MAT</code>
+| line
+|-
+| SKP
+| line change on MAT condition
+| <code>-&gt;MAT?MAT</code>
+| line, expression
+|-
+| JMP
+| line change on MIX comparison
+| <code>-&gt;MAT??MIX=MIX</code>
+| line, text 1, text 2
+|-
+| DIE
+| exit program
+| <code>&gt;&lt;MIX</code>
+| text
+|}
+
+(JMP comparisons: <code>=</code> for equality, <code>&lt;</code> for before, <code>&gt;</code> for after, <code>~</code> for contains)
