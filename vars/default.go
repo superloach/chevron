@@ -8,7 +8,7 @@ var Default map[string]string = map[string]string{
 	"_d": "-",
 	"_s": "_",
 	"_e": "=",
-	"_c": ":",
+	"_o": ":",
 	"_n": "\n",
 	"_a": "abcdefghijklmnopqrstuvwxyz",
 	"_i": "0123456789",

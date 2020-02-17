@@ -1,3 +1,4 @@
+<>benchmark.ch
 >^__>>^m
 0>>^i
 :for

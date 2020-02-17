@@ -1,8 +1,12 @@
+<>guesser.ch
 >range: >>^r
-^r<<^r-1
-^n<<^r~r
-^n<<^n+1
+^r-1>>^r
+^r~r>>^n
+^n,0~d>>^n
+^n+1>>^n
+:loop
 >guess: >>^g
-->+2?^g=^n
-->-2
+->end?^g=^n
+->loop
+:end
 ><good job
