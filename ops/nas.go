@@ -11,7 +11,7 @@ type NAS struct {
 }
 
 func (n NAS) String() string {
-	return "NAS `" + n.Var + "` `" + n.Expr + "`"
+	return "NAS `" + n.Expr + "` `" + n.Var + "`"
 }
 
 func (n NAS) Run(v *vars.Vars) error {

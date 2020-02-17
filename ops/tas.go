@@ -11,7 +11,7 @@ type TAS struct {
 }
 
 func (t TAS) String() string {
-	return "TAS `" + t.Var + "` `" + t.Text + "`"
+	return "TAS `" + t.Text + "` `" + t.Var + "`"
 }
 
 func (t TAS) Run(v *vars.Vars) error {

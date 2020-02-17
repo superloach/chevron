@@ -16,7 +16,9 @@ func (v *Vars) Get(name string) (string, error) {
 	if name[0] == '^' {
 		name = name[1:]
 	}
+
 	val, ok := v.values[name]
+
 	if !ok {
 		return "", errs.Err("^" + name + " is not defined")
 	}
@@ -27,6 +29,7 @@ func (v *Vars) Set(name, value string) {
 	if name[0] == '^' {
 		name = name[1:]
 	}
+
 	v.values[name] = value
 }
 
