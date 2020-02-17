@@ -11,6 +11,5 @@ func (l LBL) String() string {
 }
 
 func (l LBL) Run(v *vars.Vars) error {
-	v.Set("_l", l.Name)
 	return nil
 }

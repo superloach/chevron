@@ -1,7 +1,9 @@
 package ops
 
-import "github.com/superloach/chevron/vars"
-import "github.com/superloach/chevron/mix"
+import (
+	"github.com/superloach/chevron/mix"
+	"github.com/superloach/chevron/vars"
+)
 
 type OUT struct {
 	Text string

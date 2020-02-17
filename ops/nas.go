@@ -1,11 +1,13 @@
 package ops
 
-import "github.com/superloach/chevron/vars"
-import "github.com/superloach/chevron/mat"
+import (
+	"github.com/superloach/chevron/mat"
+	"github.com/superloach/chevron/vars"
+)
 
 type NAS struct {
 	Expr string
-	Var string
+	Var  string
 }
 
 func (n NAS) String() string {

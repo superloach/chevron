@@ -1,95 +1,115 @@
 package chevron
 
-import "os"
-import "fmt"
-import "bufio"
-import "strings"
-import "strconv"
-import "github.com/superloach/chevron/vars"
-import "github.com/superloach/chevron/ops"
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+
+	"github.com/superloach/chevron/errs"
+	"github.com/superloach/chevron/ops"
+	"github.com/superloach/chevron/vars"
+)
 
 type Chevron struct {
-	Src string
-	Args []string
-	Lines []string
+	Src     string
+	Args    []string
+	Lines   []string
 	Program []ops.Op
-	Linenum int
-	Vars *vars.Vars
-	Err error
-	Debug bool
+	Vars    *vars.Vars
+	Debug   bool
 }
 
-func Load(src string, args []string, debug bool) *Chevron {
+func Load(src string, args []string, debug bool) (*Chevron, error) {
 	cv := Chevron{}
 
-	cv.Debug = debug
-	cv.Err = nil
-
-	file, err := os.Open(src)
-	if err != nil {
-		cv.Err = err
-		return &cv
-	}
 	cv.Src = src
-
 	cv.Args = args
+	cv.Debug = debug
+	cv.Lines = make([]string, 0)
+	cv.Program = make([]ops.Op, 0)
+	cv.Vars = vars.MkVars()
 
-	lines := make([]string, 0)
+	file, err := os.Open(cv.Src)
+	if err != nil {
+		return &cv, err
+	}
+
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-	err = scanner.Err()
-	if err != nil {
-		cv.Err = err
-		return &cv
-	}
-
-	plines := make([]string, 0)
-	program := make([]ops.Op, 0)
-	for _, l := range lines {
+		l := scanner.Text()
 		op := ops.Find(l)
 		if op != nil {
-			plines = append(plines, l)
-			program = append(program, op)
+			switch op.(type) {
+			case ops.LBL:
+				lbl := op.(ops.LBL)
+				val := strconv.Itoa(len(cv.Lines) + 1)
+				cv.Vars.Set(":"+lbl.Name, val)
+			default:
+			case ops.BAD:
+				return &cv, op.(ops.BAD)
+			}
+			cv.Lines = append(cv.Lines, l)
+			cv.Program = append(cv.Program, op)
 		}
 	}
-	cv.Lines = plines
-	cv.Program = program
 
-	cv.Linenum = 1
+	err = scanner.Err()
+	if err != nil {
+		return &cv, err
+	}
 
-	cv.Vars = vars.MkVars()
 	cv.Vars.Set("_s", src)
-	cv.Vars.Set("_#", strconv.Itoa(cv.Linenum))
+	cv.Vars.Set("_#", "1")
 	cv.Vars.Set("_g", strings.Join(cv.Args, "\x00"))
 
-	return &cv
+	return &cv, nil
 }
 
-func (cv *Chevron) Step() {
+func (cv *Chevron) DebugPrint(args ...interface{}) {
 	if cv.Debug {
-		println("line", cv.Linenum)
+		fmt.Println(args...)
 	}
-	if cv.Linenum > len(cv.Program) {
-		cv.Err = EOP
-	}
-	if cv.Err != nil {
-		if cv.Debug {
-			println("err", cv.Err.Error())
-		}
-		return
-	}
-	cv.Vars.Set("_#", strconv.Itoa(cv.Linenum))
-	if cv.Debug {
-		println("line", cv.Lines[cv.Linenum - 1])
-	}
-	op := cv.Program[cv.Linenum - 1]
-	if cv.Debug {
-		println("op", op.String())
-	}
-	cv.Err = op.Run(cv.Vars)
-	cv.Linenum++
 }
 
-var EOP error = fmt.Errorf("end of program")
+func (cv *Chevron) Step() error {
+	lns, err := cv.Vars.Get("_#")
+	if err != nil {
+		return err
+	}
+
+	linenum, err := strconv.Atoi(lns)
+	if err != nil {
+		return err
+	}
+
+	if linenum > len(cv.Program) {
+		return errs.EOF
+	}
+
+	cv.DebugPrint("linenum", linenum)
+	cv.DebugPrint("line", cv.Lines[linenum-1])
+
+	op := cv.Program[linenum-1]
+	cv.DebugPrint("op", op.String())
+
+	err = op.Run(cv.Vars)
+	if err != nil {
+		return err
+	}
+
+	lns = strconv.Itoa(linenum)
+
+	nlns, err := cv.Vars.Get("_#")
+	if err != nil {
+		return err
+	}
+
+	if lns == nlns {
+		linenum++
+		cv.Vars.Set("_#", strconv.Itoa(linenum))
+	}
+
+	return err
+}

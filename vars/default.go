@@ -6,10 +6,11 @@ var Default map[string]string = map[string]string{
 	"_u": "^",
 	"_q": "?",
 	"_d": "-",
+	"_s": "_",
 	"_e": "=",
+	"_c": ":",
 	"_n": "\n",
 	"_a": "abcdefghijklmnopqrstuvwxyz",
 	"_i": "0123456789",
-	"_x": "\x00",
 	"__": "",
 }

@@ -1,11 +1,18 @@
 package ops
 
-import "github.com/superloach/chevron/vars"
-import "github.com/superloach/chevron/mix"
+import (
+	"bufio"
+	"os"
+
+	"github.com/superloach/chevron/mix"
+	"github.com/superloach/chevron/vars"
+)
+
+var TINScanner = bufio.NewScanner(os.Stdin)
 
 type TIN struct {
 	Prompt string
-	Var string
+	Var    string
 }
 
 func (t TIN) String() string {
@@ -17,8 +24,17 @@ func (t TIN) Run(v *vars.Vars) error {
 	if err != nil {
 		return err
 	}
+
 	print(text)
-	println("STUB INPUT")
-	v.Set(t.Var, "STUB")
+
+	TINScanner.Scan()
+	err = TINScanner.Err()
+	if err != nil {
+		return err
+	}
+	value := TINScanner.Text()
+
+	v.Set(t.Var, value)
+
 	return nil
 }

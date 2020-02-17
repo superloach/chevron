@@ -4,54 +4,101 @@ import "strings"
 
 func Find(line string) Op {
 	switch {
-	case line[0] == '<':
+	case len(line) >= 1 && line[:1] == ":":
+		return LBL{line[1:]}
+	case len(line) >= 2 && line[:2] == "<>":
+		return COM{line[2:]}
+	case len(line) >= 2 && line[:2] == "><":
+		return DIE{line[2:]}
+	case len(line) >= 2 && line[:2] == "->":
 		switch {
-		case line[1] == '>':
-			if line[2] == ':' {
-				return LBL{line[3:]}
+		case strings.Contains(line[2:], "??"):
+			parts := strings.Split(line[2:], "??")
+			if len(parts) != 2 {
+				return BAD{line, "wrong number of parts"}
 			}
-			return COM{line[2:]}
+
+			opi := strings.IndexAny(parts[1], AllCmps())
+			if opi == -1 {
+				return BAD{line, "no cmp"}
+			}
+
+			to := strings.Trim(parts[0], " ")
+			lh := strings.Trim(parts[1][:opi], " ")
+			op := strings.Trim(parts[1][opi : opi+1], " ")
+			rh := strings.Trim(parts[1][opi+1:], " ")
+
+			return JMP{to, lh, op, rh}
+		case strings.Contains(line[2:], "?"):
+			parts := strings.Split(line[2:], "?")
+			if len(parts) != 2 {
+				return BAD{line, "wrong number of parts"}
+			}
+
+			to := strings.Trim(parts[0], " ")
+			ifs := strings.Trim(parts[1], " ")
+
+			return SKP{to, ifs}
 		default:
-			return nil
+			to := strings.Trim(line[2:], " ")
+
+			return HOP{to}
 		}
-	case line[0] == '>':
+	case len(line) >= 1 && line[:1] == ">":
 		switch {
 		case strings.Contains(line[1:], ">>"):
 			parts := strings.Split(line[1:], ">>")
 			if len(parts) != 2 {
-				return nil
+				return BAD{line, "wrong number of parts"}
 			}
-			if parts[1][0] == '^' {
-				parts[1] = parts[1][1:]
-			}
-			return NIN{parts[0], parts[1]}
+
+			prompt := parts[0]
+			varn := strings.Trim(parts[1], " ")
+
+			return NIN{prompt, varn}
 		case strings.Contains(line[1:], ">"):
 			parts := strings.Split(line[1:], ">")
 			if len(parts) != 2 {
-				return nil
+				return BAD{line, "wrong number of parts"}
 			}
-			if parts[1][0] == '^' {
-				parts[1] = parts[1][1:]
-			}
-			return TIN{parts[0], parts[1]}
+
+			prompt := parts[0]
+			varn := strings.Trim(parts[1], " ")
+
+			return TIN{prompt, varn}
 		default:
-			return OUT{line[1:]}
+			text := line[1:]
+
+			return OUT{text}
 		}
 	default:
 		switch {
-		case strings.Contains(line, "<<"):
-			parts := strings.Split(line, "<<")
+		case strings.Contains(line, ">>"):
+			parts := strings.Split(line, ">>")
 			if len(parts) != 2 {
-				return nil
+				return BAD{line, "wrong number of parts"}
 			}
-			if parts[1][0] == '^' {
-				parts[1] = parts[1][1:]
+
+			expr := strings.Trim(parts[0], " ")
+			varn := strings.Trim(parts[1], " ")
+
+			return NAS{expr, varn}
+		case strings.Contains(line, ">"):
+			parts := strings.Split(line, ">")
+			if len(parts) != 2 {
+				return BAD{line, "wrong number of parts"}
 			}
-			return NAS{parts[0], parts[1]}
-		case strings.Contains(line, "<"):
-			return nil
+
+			expr := strings.Trim(parts[0], " ")
+			varn := strings.Trim(parts[1], " ")
+
+			return TAS{expr, varn}
 		default:
-			return nil
+			if strings.Trim(line, " ") == "" {
+				return EMP{}
+			} else {
+				return BAD{line, "unknown"}
+			}
 		}
 	}
 }
