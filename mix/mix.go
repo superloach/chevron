@@ -2,20 +2,25 @@ package mix
 
 import "github.com/superloach/chevron/vars"
 
-func Mix(text string, v *vars.Vars) (string, error) {
+func Mix(t string, v *vars.Vars) (string, error) {
+	text := []rune(t)
 	for i := 0; i < len(text)-1; i++ {
 		if text[i] == '^' {
-			n := string(text[i+1])
-			if (n == "_" || n == ":") && i < len(text)-2 {
-				n += string(text[i+2])
+			n := text[i+1:i+2]
+			if (n[0] == '_' || n[0] == ':') && i < len(text)-2 {
+				n = append(n, text[i+2])
 			}
-			a, err := v.Get(n)
+			a, err := v.Get(string(n))
 			if err != nil {
 				return "", err
 			}
-			text = text[:i] + a + text[i+1+len(n):]
+			newtxt := make([]rune, len(text) + len(a))
+			newtxt = append(newtxt, text[:i]...)
+			newtxt = append(newtxt, []rune(a)...)
+			newtxt = append(newtxt, text[i+1+len(n):]...)
+			text = newtxt
 			i += len(a) - 1
 		}
 	}
-	return text, nil
+	return string(text), nil
 }
