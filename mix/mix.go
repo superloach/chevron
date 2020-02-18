@@ -14,11 +14,7 @@ func Mix(t string, v *vars.Vars) (string, error) {
 			if err != nil {
 				return "", err
 			}
-			newtxt := make([]rune, len(text) + len(a))
-			newtxt = append(newtxt, text[:i]...)
-			newtxt = append(newtxt, []rune(a)...)
-			newtxt = append(newtxt, text[i+1+len(n):]...)
-			text = newtxt
+			text = []rune(string(text[:i]) + a + string(text[i+1+len(n):]))
 			i += len(a) - 1
 		}
 	}
