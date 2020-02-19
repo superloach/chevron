@@ -116,7 +116,7 @@ func linkF(this js.Value, _ []js.Value) interface{} {
 	return nil
 }
 
-func init() {
+func mkElements() {
 	src = document.Call("createElement", "textarea")
 
 	inp = document.Call("createElement", "textarea")
@@ -152,7 +152,9 @@ func init() {
 	body.Call("append", br())
 	body.Call("append", out)
 	body.Call("append", br())
+}
 
+func parseQuery() {
 	raw_href := window.Get("location").Get("href").String()
 	href, err := url.Parse(raw_href)
 	if err != nil {
@@ -170,6 +172,16 @@ func init() {
 	inp.Set("value", string(inp_raw))
 }
 
+func loaded() {
+	loading := document.Call("getElementById", "loading")
+	loading.Call("remove")
+}
+
 func main() {
+	mkElements()
+	parseQuery()
+
+	loaded()
+
 	select {}
 }
