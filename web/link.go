@@ -17,7 +17,7 @@ func linkF(this js.Value, _ []js.Value) interface{} {
 	raw_href := window.Get("location").Get("href").String()
 	href, err := url.Parse(raw_href)
 	if err != nil {
-		panic(err)
+		return nil
 	}
 
 	query := href.Query()

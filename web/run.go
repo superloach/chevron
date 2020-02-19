@@ -29,7 +29,7 @@ func runF(this js.Value, _ []js.Value) interface{} {
 	if !errs.Okay(err) {
 		ln, lnerr := ch.Vars.Get("_#")
 		if lnerr != nil {
-			panic(lnerr)
+			return nil
 		}
 		window.Call("alert", "error on line "+ln+": "+err.Error())
 	}
