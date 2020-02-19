@@ -1,11 +1,11 @@
 package mat
 
 import (
-	"time"
 	"math/big"
 	"math/rand"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/superloach/chevron/errs"
 )

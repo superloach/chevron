@@ -1,10 +1,10 @@
 package main
 
 import (
+	"encoding/base64"
 	"io"
 	"net/url"
 	"syscall/js"
-	"encoding/base64"
 
 	"github.com/superloach/chevron"
 	"github.com/superloach/chevron/errs"
@@ -31,30 +31,30 @@ type inpReader struct {
 func (r *inpReader) Read(p []byte) (int, error) {
 	i := 0
 	v := inp.Get("value").String()
-	if r.index + i >= len(v) {
+	if r.index+i >= len(v) {
 		prompt := window.Call("prompt", "")
 		if prompt.Truthy() {
 			v = prompt.String()
 		}
 	}
-	for i < len(p) && r.index + i < len(v) {
-		println(r.index + i, len(v))
-		b := v[r.index + i]
-		out.Set("value", out.Get("value").String() + string(b))
+	for i < len(p) && r.index+i < len(v) {
+		println(r.index+i, len(v))
+		b := v[r.index+i]
+		out.Set("value", out.Get("value").String()+string(b))
 		if b == '\n' {
 			break
 		}
 		p[i] = b
 		i++
 	}
-	if r.index + i >= len(v) {
-		out.Set("value", out.Get("value").String() + "\n")
+	if r.index+i >= len(v) {
+		out.Set("value", out.Get("value").String()+"\n")
 	}
 	r.index += i + 1
 	return i, io.EOF
 }
 
-type outWriter struct {}
+type outWriter struct{}
 
 func (w *outWriter) Write(p []byte) (int, error) {
 	v := out.Get("value").String()
@@ -87,7 +87,7 @@ func runF(this js.Value, _ []js.Value) interface{} {
 		if lnerr != nil {
 			panic(lnerr)
 		}
-		window.Call("alert", "error on line " + ln + ": " + err.Error())
+		window.Call("alert", "error on line "+ln+": "+err.Error())
 	}
 
 	return nil
