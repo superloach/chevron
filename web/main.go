@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"io"
 	"net/url"
+	"strconv"
 	"strings"
 	"syscall/js"
 
@@ -19,6 +20,7 @@ var src js.Value
 var inp js.Value
 var run js.Value
 var link js.Value
+var bytes js.Value
 var out js.Value
 var debug js.Value
 var printInp js.Value
@@ -128,6 +130,18 @@ func linkF(this js.Value, _ []js.Value) interface{} {
 	return nil
 }
 
+func bytesF(this js.Value, _ []js.Value) interface{} {
+	src_raw := src.Get("value").String()
+
+	src_bytes := strconv.Itoa(len([]byte(src_raw)))
+	src_runes := strconv.Itoa(len([]rune(src_raw)))
+	src_lines := strconv.Itoa(len(strings.Split(src_raw, "\n")))
+
+	window.Call("alert", src_bytes+" bytes\n"+src_runes+" runes\n"+src_lines+" lines")
+
+	return nil
+}
+
 func mkElements() {
 	src = document.Call("createElement", "textarea")
 	body.Call("append", "src:")
@@ -152,6 +166,12 @@ func mkElements() {
 	link.Set("value", "link")
 	link.Call("addEventListener", "click", js.FuncOf(linkF))
 	body.Call("append", link)
+
+	bytes = document.Call("createElement", "input")
+	bytes.Set("type", "button")
+	bytes.Set("value", "bytes")
+	bytes.Call("addEventListener", "click", js.FuncOf(bytesF))
+	body.Call("append", bytes)
 	body.Call("append", br())
 
 	out = document.Call("createElement", "textarea")
