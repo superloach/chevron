@@ -1,6 +1,7 @@
 package mat
 
 import (
+	"time"
 	"math/big"
 	"math/rand"
 	"strconv"
@@ -8,6 +9,10 @@ import (
 
 	"github.com/superloach/chevron/errs"
 )
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
 
 type SNumOp func(float64) (float64, error)
 type STxtOp func(string) (string, error)
