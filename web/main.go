@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strings"
 	"encoding/base64"
 	"io"
 	"net/url"
@@ -32,7 +33,9 @@ func (r *inpReader) Read(p []byte) (int, error) {
 	i := 0
 	v := inp.Get("value").String()
 	if r.index+i >= len(v) {
-		prompt := window.Call("prompt", "")
+		ls := strings.Split(out.Get("value").String(), "\n")
+		last := ls[len(ls) - 1]
+		prompt := window.Call("prompt", last)
 		if prompt.Truthy() {
 			v = prompt.String()
 		}
@@ -174,7 +177,9 @@ func parseQuery() {
 
 func loaded() {
 	loading := document.Call("getElementById", "loading")
-	loading.Call("remove")
+	if loading.Truthy() {
+		loading.Call("remove")
+	}
 }
 
 func main() {
