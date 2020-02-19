@@ -19,6 +19,7 @@ type Chevron struct {
 	Lines   []string
 	Program []ops.Op
 	Vars    *vars.Vars
+	Err     io.Writer
 	Out     io.Writer
 	In      io.Reader
 	Debug   bool
@@ -78,9 +79,9 @@ func Load(code string, args []string, debug bool) (*Chevron, error) {
 	return &ch, nil
 }
 
-func (ch *Chevron) DebugPrint(args ...interface{}) {
+func (ch *Chevron) DebugPrintln(args ...interface{}) {
 	if ch.Debug {
-		fmt.Println(args...)
+		fmt.Fprint(ch.Err, "\u26A0 "+fmt.Sprintln(args...))
 	}
 }
 
@@ -99,11 +100,11 @@ func (ch *Chevron) Step() error {
 		return errs.EOF
 	}
 
-	ch.DebugPrint("linenum", linenum)
-	ch.DebugPrint("line", ch.Lines[linenum-1])
+	ch.DebugPrintln("linenum", linenum)
+	ch.DebugPrintln("line", ch.Lines[linenum-1])
 
 	op := ch.Program[linenum-1]
-	ch.DebugPrint("op", op.String())
+	ch.DebugPrintln("op", op.String())
 
 	err = op.Run(ch.Vars, ch.In, ch.Out)
 	if err != nil {

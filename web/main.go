@@ -1,10 +1,10 @@
 package main
 
 import (
-	"strings"
 	"encoding/base64"
 	"io"
 	"net/url"
+	"strings"
 	"syscall/js"
 
 	"github.com/superloach/chevron"
@@ -20,6 +20,13 @@ var inp js.Value
 var run js.Value
 var link js.Value
 var out js.Value
+var debug js.Value
+var printInp js.Value
+var promptInp js.Value
+
+const defaultDebug bool = false
+const defaultPrintInp bool = true
+const defaultPromptInp bool = true
 
 func br() js.Value {
 	return document.Call("createElement", "br")
@@ -32,18 +39,19 @@ type inpReader struct {
 func (r *inpReader) Read(p []byte) (int, error) {
 	i := 0
 	v := inp.Get("value").String()
-	if r.index+i >= len(v) {
+	if r.index+i >= len(v) && promptInp.Get("checked").Bool() {
 		ls := strings.Split(out.Get("value").String(), "\n")
-		last := ls[len(ls) - 1]
+		last := ls[len(ls)-1]
 		prompt := window.Call("prompt", last)
 		if prompt.Truthy() {
 			v = prompt.String()
 		}
 	}
 	for i < len(p) && r.index+i < len(v) {
-		println(r.index+i, len(v))
 		b := v[r.index+i]
-		out.Set("value", out.Get("value").String()+string(b))
+		if printInp.Get("checked").Bool() {
+			out.Set("value", out.Get("value").String()+string(b))
+		}
 		if b == '\n' {
 			break
 		}
@@ -69,17 +77,17 @@ func (w *outWriter) Write(p []byte) (int, error) {
 func runF(this js.Value, _ []js.Value) interface{} {
 	src_raw := src.Get("value").String()
 	args := []string{}
-	debug := false
 
-	ch, err := chevron.Load(src_raw, args, debug)
+	ch, err := chevron.Load(src_raw, args, debug.Get("checked").Bool())
 	if err != nil {
 		window.Call("alert", err.Error())
 	}
 
 	out.Set("value", "")
 
-	ch.Out = &outWriter{}
 	ch.In = &inpReader{}
+	ch.Out = &outWriter{}
+	ch.Err = &outWriter{}
 
 	for err == nil {
 		err = ch.Step()
@@ -113,6 +121,7 @@ func linkF(this js.Value, _ []js.Value) interface{} {
 	query := href.Query()
 	query.Set("src", src64)
 	query.Set("inp", inp64)
+
 	href.RawQuery = query.Encode()
 	window.Get("location").Set("href", href.String())
 
@@ -121,40 +130,56 @@ func linkF(this js.Value, _ []js.Value) interface{} {
 
 func mkElements() {
 	src = document.Call("createElement", "textarea")
-
-	inp = document.Call("createElement", "textarea")
-
-	run = document.Call("createElement", "input")
-	run.Set("type", "button")
-	run.Set("value", "run")
-	run.Call("addEventListener", "click", js.FuncOf(runF))
-
-	link = document.Call("createElement", "input")
-	link.Set("type", "button")
-	link.Set("value", "link")
-	link.Call("addEventListener", "click", js.FuncOf(linkF))
-
-	out = document.Call("createElement", "textarea")
-	out.Set("readOnly", "true")
-
 	body.Call("append", "src:")
 	body.Call("append", br())
 	body.Call("append", src)
 	body.Call("append", br())
 
+	inp = document.Call("createElement", "textarea")
 	body.Call("append", "inp:")
 	body.Call("append", br())
 	body.Call("append", inp)
 	body.Call("append", br())
 
+	run = document.Call("createElement", "input")
+	run.Set("type", "button")
+	run.Set("value", "run")
+	run.Call("addEventListener", "click", js.FuncOf(runF))
 	body.Call("append", run)
+
+	link = document.Call("createElement", "input")
+	link.Set("type", "button")
+	link.Set("value", "link")
+	link.Call("addEventListener", "click", js.FuncOf(linkF))
 	body.Call("append", link)
 	body.Call("append", br())
 
+	out = document.Call("createElement", "textarea")
+	out.Set("readOnly", true)
 	body.Call("append", "out:")
 	body.Call("append", br())
 	body.Call("append", out)
 	body.Call("append", br())
+
+	debug = document.Call("createElement", "input")
+	debug.Set("type", "checkbox")
+	debug.Set("checked", defaultDebug)
+	body.Call("append", debug)
+	body.Call("append", "debug")
+	body.Call("append", br())
+
+	printInp = document.Call("createElement", "input")
+	printInp.Set("type", "checkbox")
+	printInp.Set("checked", defaultPrintInp)
+	body.Call("append", printInp)
+	body.Call("append", "print inp")
+	body.Call("append", br())
+
+	promptInp = document.Call("createElement", "input")
+	promptInp.Set("type", "checkbox")
+	promptInp.Set("checked", defaultPromptInp)
+	body.Call("append", promptInp)
+	body.Call("append", "prompt inp")
 }
 
 func parseQuery() {
@@ -170,8 +195,9 @@ func parseQuery() {
 
 	enc := base64.URLEncoding
 	src_raw, _ := enc.DecodeString(src64)
-	src.Set("value", string(src_raw))
 	inp_raw, _ := enc.DecodeString(inp64)
+
+	src.Set("value", string(src_raw))
 	inp.Set("value", string(inp_raw))
 }
 

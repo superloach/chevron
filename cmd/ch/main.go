@@ -33,6 +33,7 @@ func main() {
 
 	ch.In = os.Stdin
 	ch.Out = os.Stdout
+	ch.Err = os.Stderr
 
 	for err == nil {
 		err = ch.Step()
