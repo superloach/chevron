@@ -11,7 +11,7 @@ func setup() {
 	if len(exs) > 0 {
 		exmp = document.Call("createElement", "select")
 		o := document.Call("createElement", "option")
-		o.Set("text", "examples")
+		o.Set("text", "")
 		o.Set("value", "")
 		exmp.Call("append", o)
 		for _, ex := range exs {
@@ -21,6 +21,7 @@ func setup() {
 			exmp.Call("append", o)
 		}
 		exmp.Call("addEventListener", "change", js.FuncOf(exmpF))
+		body.Call("append", "examples: ")
 		body.Call("append", exmp)
 		body.Call("append", br())
 	}

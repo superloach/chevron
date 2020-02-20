@@ -49,6 +49,9 @@ func examples() []string {
 
 func exmpF(this js.Value, _ []js.Value) interface{} {
 	name := exmp.Get("value").String()
+	if name == "" {
+		return nil
+	}
 
 	raw_href := window.Get("location").Get("href").String()
 	href, err := url.Parse(raw_href)
