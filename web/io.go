@@ -20,9 +20,10 @@ func (r *inpReader) Read(p []byte) (int, error) {
 			v = prompt.String()
 		}
 	}
+	pri := printInp.Get("checked").Bool()
 	for i < len(p) && r.index+i < len(v) {
 		b := v[r.index+i]
-		if printInp.Get("checked").Bool() {
+		if pri {
 			out.Set("value", out.Get("value").String()+string(b))
 		}
 		if b == '\n' {
@@ -31,7 +32,7 @@ func (r *inpReader) Read(p []byte) (int, error) {
 		p[i] = b
 		i++
 	}
-	if r.index+i >= len(v) {
+	if pri && r.index+i >= len(v) {
 		out.Set("value", out.Get("value").String()+"\n")
 	}
 	r.index += i + 1
