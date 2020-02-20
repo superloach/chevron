@@ -7,6 +7,24 @@ func br() js.Value {
 }
 
 func setup() {
+	exs := examples()
+	if len(exs) > 0 {
+		exmp = document.Call("createElement", "select")
+		o := document.Call("createElement", "option")
+		o.Set("text", "examples")
+		o.Set("value", "")
+		exmp.Call("append", o)
+		for _, ex := range exs {
+			o = document.Call("createElement", "option")
+			o.Set("text", ex)
+			o.Set("value", ex)
+			exmp.Call("append", o)
+		}
+		exmp.Call("addEventListener", "change", js.FuncOf(exmpF))
+		body.Call("append", exmp)
+		body.Call("append", br())
+	}
+
 	src = document.Call("createElement", "textarea")
 	body.Call("append", "src:")
 	body.Call("append", br())
@@ -44,24 +62,6 @@ func setup() {
 	bytes.Call("addEventListener", "click", js.FuncOf(bytesF))
 	body.Call("append", bytes)
 	body.Call("append", br())
-
-	exs := examples()
-	if len(exs) > 0 {
-		exmp = document.Call("createElement", "select")
-		o := document.Call("createElement", "option")
-		o.Set("text", "examples")
-		o.Set("value", "")
-		exmp.Call("append", o)
-		for _, ex := range exs {
-			o = document.Call("createElement", "option")
-			o.Set("text", ex)
-			o.Set("value", ex)
-			exmp.Call("append", o)
-		}
-		exmp.Call("addEventListener", "change", js.FuncOf(exmpF))
-		body.Call("append", exmp)
-		body.Call("append", br())
-	}
 
 	debug = document.Call("createElement", "input")
 	debug.Set("type", "checkbox")

@@ -3,7 +3,6 @@ package main
 import "encoding/json"
 import "net/url"
 import "syscall/js"
-import "fmt"
 
 func examples() []string {
 	raw_href := window.Get("location").Get("href").String()

@@ -1,4 +1,4 @@
->^__>^t
+>word to test: >^t
 ^t~s>>^s
 1>>^i
 :l
@@ -7,10 +7,8 @@
 ^j+1>>^j
 ->x?^i>^j
 ^t,^j~c>>^d
->^i ^c
->^j ^d
 ^i+1>>^i
 ->l??^c=^d
-><0
+><"^t" is not a palindrome
 :x
-><1
+><"^t" is a palindrome
