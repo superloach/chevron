@@ -1,9 +1,8 @@
 package main
 
 func main() {
-	elems()
+	setup()
 	query()
-	examples()
 
 	loading := document.Call("getElementById", "loading")
 	if loading.Truthy() {

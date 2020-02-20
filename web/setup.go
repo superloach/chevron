@@ -6,7 +6,7 @@ func br() js.Value {
 	return document.Call("createElement", "br")
 }
 
-func elems() {
+func setup() {
 	src = document.Call("createElement", "textarea")
 	body.Call("append", "src:")
 	body.Call("append", br())
@@ -17,6 +17,13 @@ func elems() {
 	body.Call("append", "inp:")
 	body.Call("append", br())
 	body.Call("append", inp)
+	body.Call("append", br())
+
+	out = document.Call("createElement", "textarea")
+	out.Set("readOnly", true)
+	body.Call("append", "out:")
+	body.Call("append", br())
+	body.Call("append", out)
 	body.Call("append", br())
 
 	run = document.Call("createElement", "input")
@@ -38,12 +45,23 @@ func elems() {
 	body.Call("append", bytes)
 	body.Call("append", br())
 
-	out = document.Call("createElement", "textarea")
-	out.Set("readOnly", true)
-	body.Call("append", "out:")
-	body.Call("append", br())
-	body.Call("append", out)
-	body.Call("append", br())
+	exs := examples()
+	if len(exs) > 0 {
+		exmp = document.Call("createElement", "select")
+		o := document.Call("createElement", "option")
+		o.Set("text", "examples")
+		o.Set("value", "")
+		exmp.Call("append", o)
+		for _, ex := range exs {
+			o = document.Call("createElement", "option")
+			o.Set("text", ex)
+			o.Set("value", ex)
+			exmp.Call("append", o)
+		}
+		exmp.Call("addEventListener", "change", js.FuncOf(exmpF))
+		body.Call("append", exmp)
+		body.Call("append", br())
+	}
 
 	debug = document.Call("createElement", "input")
 	debug.Set("type", "checkbox")

@@ -9,9 +9,10 @@ var body js.Value = document.Get("body")
 var src js.Value
 var inp js.Value
 var run js.Value
+var out js.Value
 var link js.Value
 var bytes js.Value
-var out js.Value
+var exmp js.Value
 var debug js.Value
 var printInp js.Value
 var promptInp js.Value

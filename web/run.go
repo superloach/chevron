@@ -14,6 +14,7 @@ func runF(this js.Value, _ []js.Value) interface{} {
 	ch, err := chevron.Load(src_raw, args, debug.Get("checked").Bool())
 	if err != nil {
 		window.Call("alert", err.Error())
+		panic(err)
 	}
 
 	out.Set("value", "")
