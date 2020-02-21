@@ -145,10 +145,38 @@ var STxtOps map[string]STxtOp = map[string]STxtOp{
 		return string([]rune{rune(code)}), nil
 	},
 	"x": func(s string) (string, error) {
-		num, err := strconv.ParseInt(s, 16, 64)
+		parts := strings.Split(s, "\x00")
+		if len(parts) < 2 || len(parts) > 3 {
+			return "", errs.Err("bad base convert")
+		}
+
+		err := error(nil)
+		base1 := 10
+		base2 := 10
+
+		if len(parts) == 2 {
+			base1, err = strconv.Atoi(parts[1])
+			if err != nil {
+				return "", err
+			}
+		}
+
+		if len(parts) == 3 {
+			base1, err = strconv.Atoi(parts[1])
+			if err != nil {
+				return "", err
+			}
+			base2, err = strconv.Atoi(parts[2])
+			if err != nil {
+				return "", err
+			}
+		}
+
+		num, err := strconv.ParseInt(parts[0], base1, 64)
 		if err != nil {
 			return "", err
 		}
-		return strconv.Itoa(int(num)), nil
+
+		return strconv.FormatInt(num, base2), nil
 	},
 }
