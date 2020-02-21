@@ -45,11 +45,11 @@ func setup() {
 	body.Call("append", out)
 	body.Call("append", br())
 
-	run = document.Call("createElement", "input")
-	run.Set("type", "button")
-	run.Set("value", "run")
-	run.Call("addEventListener", "click", js.FuncOf(runF))
-	body.Call("append", run)
+	runStop = document.Call("createElement", "input")
+	runStop.Set("type", "button")
+	runStop.Set("value", "run")
+	runStop.Call("addEventListener", "click", js.FuncOf(runStopF))
+	body.Call("append", runStop)
 
 	link = document.Call("createElement", "input")
 	link.Set("type", "button")

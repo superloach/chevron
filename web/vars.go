@@ -8,7 +8,7 @@ var body js.Value = document.Get("body")
 
 var src js.Value
 var inp js.Value
-var run js.Value
+var runStop js.Value
 var out js.Value
 var link js.Value
 var bytes js.Value
