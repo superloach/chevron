@@ -12,12 +12,14 @@ type inpReader struct {
 func (r *inpReader) Read(p []byte) (int, error) {
 	i := 0
 	v := inp.Get("value").String()
-	if r.index+i >= len(v) && promptInp.Get("checked").Bool() {
+	if r.index >= len(v) && promptInp.Get("checked").Bool() {
 		ls := strings.Split(out.Get("value").String(), "\n")
 		last := ls[len(ls)-1]
 		prompt := window.Call("prompt", last)
-		v = prompt.String()
-		r.index = 0
+		if prompt.Truthy() {
+			v += prompt.String()
+		}
+//		r.index = 0
 	}
 	pri := printInp.Get("checked").Bool()
 	for i < len(p) && r.index+i < len(v) {
