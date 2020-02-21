@@ -10,18 +10,16 @@ import (
 )
 
 func Mat(expr string, v *vars.Vars) (string, error) {
-	expr, err := mix.Mix(expr, v)
-	if err != nil {
-		return "0", err
-	}
-
-	opi := strings.IndexAny(expr, AllNumOps()+"~")
+	opi := strings.Index(expr, "~")
 	if opi == -1 {
-		num, err := strconv.ParseFloat(expr, 64)
-		if err != nil {
-			return "0", err
+		opi = strings.IndexAny(expr, AllNumOps())
+		if opi == -1 {
+			num, err := strconv.ParseFloat(expr, 64)
+			if err != nil {
+				return "0", err
+			}
+			return strconv.FormatFloat(num, 'f', -1, 64), nil
 		}
-		return strconv.FormatFloat(num, 'f', -1, 64), nil
 	}
 
 	opn := rune(expr[opi])
@@ -59,13 +57,21 @@ func Mat(expr string, v *vars.Vars) (string, error) {
 		return "0", errs.Err("unknown mat op " + string(opn))
 	}
 
-	lhs := strings.Trim(expr[:opi], " ")
+	lhm, err := mix.Mix(expr[:opi], v)
+	if err != nil {
+		return "0", err
+	}
+	lhs := strings.Trim(lhm, " ")
 	lh, err := strconv.ParseFloat(lhs, 64)
 	if err != nil {
 		return "0", err
 	}
 
-	rhs := strings.Trim(expr[opi+1:], " ")
+	rhm, err := mix.Mix(expr[opi+1:], v)
+	if err != nil {
+		return "0", err
+	}
+	rhs := strings.Trim(rhm, " ")
 	rh, err := strconv.ParseFloat(rhs, 64)
 	if err != nil {
 		return "0", err

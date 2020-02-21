@@ -101,7 +101,7 @@ var STxtOps map[string]STxtOp = map[string]STxtOp{
 				return "", err
 			}
 			idx--
-			if idx >= len(parts[0]) || idx < 0 {
+			if idx > len(parts[0]) || idx < 0 {
 				return "", errs.Err("out of bounds")
 			}
 			return parts[0][idx : idx+1], nil
@@ -111,14 +111,15 @@ var STxtOps map[string]STxtOp = map[string]STxtOp{
 				return "", err
 			}
 			idx1--
-			if idx1 >= len(parts[0]) || idx1 < 0 {
+			if idx1 > len(parts[0]) || idx1 < 0 {
 				return "", errs.Err("out of bounds")
 			}
 			idx2, err := strconv.Atoi(parts[2])
 			if err != nil {
 				return "", err
 			}
-			if idx2 >= len(parts[0]) || idx2 < 0 {
+			idx2 = idx1 + idx2
+			if idx2 > len(parts[0]) || idx2 < 0 {
 				return "", errs.Err("out of bounds")
 			}
 			return parts[0][idx1:idx2], nil
