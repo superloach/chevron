@@ -80,7 +80,11 @@ func exmpF(this js.Value, _ []js.Value) interface{} {
 					args[0].Call("text").Call("then",
 						js.FuncOf(func (this js.Value, args []js.Value) interface{} {
 							go func() {
-								src.Set("value", args[0].String())
+								code := args[0].String()
+								if code[len(code) - 1] == '\n' {
+									code = code[:len(code) - 1]
+								}
+								src.Set("value", code)
 							}()
 							return nil
 						}),
