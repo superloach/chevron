@@ -49,5 +49,6 @@ func (w *outWriter) Write(p []byte) (int, error) {
 	v := out.Get("value").String()
 	v += string(p)
 	out.Set("value", v)
+	out.Set("scrollTop", out.Get("scrollHeight"))
 	return len(p), nil
 }
