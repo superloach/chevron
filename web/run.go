@@ -29,9 +29,12 @@ func runF() {
 	ch.Out = &outWriter{}
 	ch.Err = &outWriter{}
 
+	dl := delay.Get("checked").Bool()
 	for err == nil {
 		err = ch.Step()
-		time.Sleep(time.Millisecond)
+		if dl {
+			time.Sleep(time.Millisecond)
+		}
 	}
 
 	runStop.Set("value", "run")

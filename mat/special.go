@@ -145,6 +145,13 @@ var STxtOps map[string]STxtOp = map[string]STxtOp{
 		}
 		return string([]rune{rune(code)}), nil
 	},
+	"h": func(s string) (string, error) {
+		if len(s) != 1 {
+			return "", errs.Err("need single character")
+		}
+		code := int(rune(s[0]))
+		return strconv.Itoa(code), nil
+	},
 	"x": func(s string) (string, error) {
 		parts := strings.Split(s, "\x00")
 		if len(parts) < 2 || len(parts) > 3 {

@@ -14,9 +14,11 @@ var link js.Value
 var bytes js.Value
 var exmp js.Value
 var debug js.Value
+var delay js.Value
 var printInp js.Value
 var promptInp js.Value
 
 const defaultDebug bool = false
+const defaultDelay bool = true
 const defaultPrintInp bool = true
 const defaultPromptInp bool = true

@@ -71,6 +71,13 @@ func setup() {
 	body.Call("append", "debug")
 	body.Call("append", br())
 
+	delay = document.Call("createElement", "input")
+	delay.Set("type", "checkbox")
+	delay.Set("checked", defaultDelay)
+	body.Call("append", delay)
+	body.Call("append", "delay")
+	body.Call("append", br())
+
 	printInp = document.Call("createElement", "input")
 	printInp.Set("type", "checkbox")
 	printInp.Set("checked", defaultPrintInp)

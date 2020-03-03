@@ -21,8 +21,13 @@ func (o OUT) Run(v *vars.Vars, _ io.Reader, w io.Writer) error {
 		return err
 	}
 
+	if text[len(text) - 1] == '\\' {
+		text = text[:len(text) - 1]
+	} else {
+		text += "\n"
+	}
+
 	w.Write([]byte(text))
-	w.Write([]byte{'\n'})
 
 	return nil
 }

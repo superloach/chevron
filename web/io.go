@@ -17,9 +17,12 @@ func (r *inpReader) Read(p []byte) (int, error) {
 		last := ls[len(ls)-1]
 		prompt := window.Call("prompt", last)
 		if prompt.Truthy() {
-			v += prompt.String()
+			s := prompt.String()
+			if s != "" {
+				v += s + "\n"
+				inp.Set("value", v)
+			}
 		}
-//		r.index = 0
 	}
 	pri := printInp.Get("checked").Bool()
 	for i < len(p) && r.index+i < len(v) {
