@@ -17,5 +17,5 @@ var Default map[string]string = map[string]string{
 	"_a": "abcdefghijklmnopqrstuvwxyz",
 	"_i": "0123456789",
 	"__": "",
-	"_0": "\x00",
+	"_\\": "\x00",
 }
