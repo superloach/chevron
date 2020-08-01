@@ -1,8 +1,10 @@
 package main
 
-import "encoding/json"
-import "net/url"
-import "syscall/js"
+import (
+	"encoding/json"
+	"net/url"
+	"syscall/js"
+)
 
 func examples() []string {
 	raw_href := window.Get("location").Get("href").String()
@@ -18,10 +20,10 @@ func examples() []string {
 	done := make(chan struct{})
 
 	window.Call("fetch", hrefs).Call("then",
-		js.FuncOf(func (this js.Value, args []js.Value) interface{} {
+		js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 			go func() {
 				args[0].Call("text").Call("then",
-					js.FuncOf(func (this js.Value, args []js.Value) interface{} {
+					js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 						go func() {
 							data := []byte(args[0].String())
 							exs_raw := make([]map[string]interface{}, 0)
@@ -69,7 +71,7 @@ func exmpF(this js.Value, _ []js.Value) interface{} {
 		hrefs := href.String()
 
 		window.Call("fetch", hrefs).Call("then",
-			js.FuncOf(func (this js.Value, args []js.Value) interface{} {
+			js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 				go func() {
 					if len(args) == 0 {
 						return
@@ -78,11 +80,11 @@ func exmpF(this js.Value, _ []js.Value) interface{} {
 						return
 					}
 					args[0].Call("text").Call("then",
-						js.FuncOf(func (this js.Value, args []js.Value) interface{} {
+						js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 							go func() {
 								code := args[0].String()
-								if code[len(code) - 1] == '\n' {
-									code = code[:len(code) - 1]
+								if code[len(code)-1] == '\n' {
+									code = code[:len(code)-1]
 								}
 								src.Set("value", code)
 							}()

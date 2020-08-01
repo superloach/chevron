@@ -21,8 +21,8 @@ func (o OUT) Run(v *vars.Vars, _ io.Reader, w io.Writer) error {
 		return err
 	}
 
-	if text[len(text) - 1] == '\x00' {
-		text = text[:len(text) - 1]
+	if text[len(text)-1] == '\x00' {
+		text = text[:len(text)-1]
 	} else {
 		text += "\n"
 	}

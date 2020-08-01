@@ -1,8 +1,8 @@
 package main
 
 import (
-	"time"
 	"syscall/js"
+	"time"
 
 	"github.com/superloach/chevron"
 	"github.com/superloach/chevron/errs"
